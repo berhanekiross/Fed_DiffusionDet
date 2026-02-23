@@ -1,0 +1,116 @@
+# DiffusionDet Configuration for KITTI Dataset with ResNet-50
+# Based on the original DiffusionDet COCO configuration
+# Adapted for KITTI object detection with 7 classes (without Misc/DontCare)
+
+# Note: Remove the _BASE_ line since we're including all configs directly
+# _BASE_: "Base-DiffusionDet.yaml"
+
+MODEL:
+  META_ARCHITECTURE: "DiffusionDetROIHead"
+  WEIGHTS: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"  # ResNet-50 pretrained weights
+  
+  BACKBONE:
+    NAME: "build_resnet_fpn_backbone"
+  
+  RESNETS:
+    DEPTH: 50
+    STRIDE_IN_1X1: False
+    OUT_FEATURES: ["res2", "res3", "res4", "res5"]
+    NORM: "FrozenBN"
+    
+  FPN:
+    IN_FEATURES: ["res2", "res3", "res4", "res5"]
+    OUT_CHANNELS: 256
+    NORM: ""
+    FUSE_TYPE: "sum"
+    
+  DiffusionDet:
+    NUM_PROPOSALS: 500               # Number of object proposals
+    NUM_CLASSES: 7                   # KITTI classes (without Misc/DontCare)
+    HIDDEN_DIM: 256
+    NUM_HEADS: 8
+    DIM_FEEDFORWARD: 2048
+    DEC_LAYERS: 6                    # Number of decoder layers
+    SAMPLE_STEP: 1                   # Diffusion sampling steps (1 for training, 4 for inference)
+    SNR_SCALE: 2.0                   # Signal-to-noise ratio scale
+    USE_FOCAL_LOSS: True             # Use focal loss for classification
+    USE_FED_LOSS: False              # Set to True if using federated loss (for imbalanced datasets)
+    ALPHA: 0.25                      # Focal loss alpha
+    GAMMA: 2.0                       # Focal loss gamma
+    DEEP_SUPERVISION: True           # Use deep supervision
+    NO_OBJECT_WEIGHT: 0.1           # Weight for no-object class
+    CLASS_WEIGHT: 2.0               # Weight for classification loss
+    BBOX_WEIGHT: 5.0                # Weight for bounding box regression loss
+    GIOU_WEIGHT: 2.0                # Weight for GIoU loss
+    
+  ROI_HEADS:
+    NAME: "DiffusionDetROIHead"
+    NUM_CLASSES: 7                   # KITTI classes
+
+# Dataset Configuration
+DATASETS:
+  TRAIN: ("kitti_train_split",)      # We'll register this with the training split
+  TEST: ("kitti_val_split",)         # We'll register this with the validation split
+
+# Data Loader Configuration  
+DATALOADER:
+  NUM_WORKERS: 2
+  SAMPLER_TRAIN: "TrainingSampler"  # Use "RepeatFactorTrainingSampler" for imbalanced datasets
+  ASPECT_RATIO_GROUPING: True
+
+# Solver Configuration (Training Parameters)
+SOLVER:
+  IMS_PER_BATCH: 8                 # Batch size (adjust based on GPU memory)
+  BASE_LR: 0.0001                   # Base learning rate
+  STEPS: [100, 200]             # Learning rate decay steps (use list format)
+  MAX_ITER: 230                   # Maximum training iterations
+  GAMMA: 0.1                        # Learning rate decay factor
+  WEIGHT_DECAY: 0.0001
+  WEIGHT_DECAY_NORM: 0.0
+  WARMUP_FACTOR: 0.001              # Fixed: use decimal instead of division
+  WARMUP_ITERS: 1000
+  WARMUP_METHOD: "linear"
+  CHECKPOINT_PERIOD: 5000           # Save checkpoint every 5000 iterations
+  MOMENTUM: 0.9                     # SGD momentum
+  OPTIMIZER: "SGD"                  # Optimizer type
+  
+# Input Configuration
+INPUT:
+  MIN_SIZE_TRAIN: [640, 672, 704, 736, 768, 800]  # Multi-scale training (use list format)
+  MAX_SIZE_TRAIN: 1333
+  MIN_SIZE_TEST: 800
+  MAX_SIZE_TEST: 1333
+  FORMAT: "BGR"                     # Image format (BGR for detectron2)
+  MASK_ON: False                    # KITTI doesn't have segmentation masks
+  
+  # Data Augmentation
+  CROP:
+    ENABLED: True
+    TYPE: "relative_range"
+    SIZE: [0.9, 0.9]
+  
+# Test Configuration
+TEST:
+  EVAL_PERIOD: 5000                 # Evaluate every 5000 iterations
+  EXPECTED_RESULTS: []
+  KEYPOINT_OKS_SIGMAS: []
+  DETECTIONS_PER_IMAGE: 100         # Maximum detections per image
+  
+# Output Configuration
+OUTPUT_DIR: "./output2/diffdet_kitti_res50"
+
+# Version and Other Settings
+VERSION: 2
+SEED: 42
+
+# Global Configuration
+GLOBAL:
+  HACK: 1.0
+
+# CUDNN benchmark for faster training (set to False if input sizes vary)
+CUDNN_BENCHMARK: False
+
+# Model EMA (Exponential Moving Average) - optional
+MODEL_EMA:
+  ENABLED: False
+  DECAY: 0.999

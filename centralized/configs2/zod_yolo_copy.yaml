@@ -1,0 +1,25 @@
+# zod_yolo.yaml
+
+path: /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/zod_processed
+
+# train: /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/centralized/test_absolute_train.txt
+# val: /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/centralized/test_absolute_val.txt
+
+# train: annotations/centralized/train_yolo.txt  # RELATIVE path
+# val: annotations/centralized/val_yolo.txt      # RELATIVE path
+train: annotations/centralized/train_yolo_absolute.txt  # RELATIVE path
+val: annotations/centralized/val_yolo_absolute.txt      # RELATIVE path
+
+
+# ZOD classes
+names:
+  0: Vehicle
+  1: TrafficSign
+  2: PoleObject
+  3: TrafficGuide
+  4: TrafficSignal
+  5: Pedestrian
+  6: VulnerableVehicle
+  7: TrafficBeacon
+  8: DynamicBarrier
+  9: Animal

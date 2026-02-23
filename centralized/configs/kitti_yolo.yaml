@@ -1,0 +1,16 @@
+# kitti_yolo.yaml
+
+path: /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/training  # root dir containing images/ and labels/
+
+train: images/train  # relative path from 'path'
+val: images/val      # relative path from 'path'
+
+names:
+  0: Car
+  1: Van
+  2: Truck
+  3: Pedestrian
+  4: Person_sitting
+  5: Cyclist
+  6: Tram
+  7: Misc

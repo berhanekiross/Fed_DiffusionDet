@@ -1,0 +1,42 @@
+# Datasets - DON'T PUSH
+all_class_partition/
+global_val/
+testing/
+training/
+
+# Virtual environments
+vyolo/
+venv/
+env/
+
+# Other code directories (push separately)
+breyolo/
+fl_app/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Outputs
+**/final_outputs/
+**/temp/
+**/logs/
+**/inferences*/
+
+# Model weights
+*.pth
+*.pt
+
+# Images
+*.png
+*.jpg
+*.json
+
+# IDE
+.vscode/
+
+# Root files except centralized
+/*.py
+/*.txt
+/*.sh
+!README.md

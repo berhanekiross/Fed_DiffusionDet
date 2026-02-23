@@ -1,0 +1,40 @@
+This job can be monitored from: https://job.c3se.chalmers.se/alvis/5126145
+Ultralytics 8.3.170 🚀 Python-3.11.3 torch-2.1.2 CUDA:0 (NVIDIA A100-SXM4-40GB, 40441MiB)
+Model summary (fused): 72 layers, 3,007,013 parameters, 0 gradients, 8.1 GFLOPs
+
+image 1/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Car/000500.png: 224x640 5 Cars, 77.8ms
+image 2/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Car/000501.png: 224x640 4 Cars, 4.5ms
+image 3/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Car/000502.png: 224x640 1 Car, 1 Pedestrian, 4.1ms
+image 4/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Car/000503.png: 224x640 1 Car, 4.0ms
+image 5/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Car/000504.png: 224x640 1 Car, 1 Van, 3.9ms
+image 6/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Car/000505.png: 224x640 3 Cars, 4.0ms
+image 7/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Car/000506.png: 224x640 1 Car, 1 Van, 9 Pedestrians, 3.9ms
+image 8/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Car/000507.png: 224x640 1 Car, 3.9ms
+image 9/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Car/000508.png: 224x640 6 Cars, 1 Van, 4.0ms
+image 10/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Car/000509.png: 224x640 2 Cars, 4.0ms
+image 11/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Car/000510.png: 224x640 3 Cars, 1 Van, 3.9ms
+image 12/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Car/002555.png: 224x640 5 Cars, 3.9ms
+image 13/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Car/005572.png: 224x640 7 Cars, 4.4ms
+image 14/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Car/005685.png: 224x640 4 Cars, 1 Van, 1 Truck, 3.9ms
+image 15/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Cyclist/000211.png: 224x640 4 Cars, 3 Cyclists, 3.9ms
+image 16/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Cyclist/001042.png: 224x640 4 Cars, 1 Cyclist, 4.5ms
+image 17/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Cyclist/006100.png: 224x640 2 Cars, 1 Cyclist, 4.1ms
+image 18/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Pedestrian/001785.png: 224x640 4 Cars, 11 Pedestrians, 3 Cyclists, 3.9ms
+image 19/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Pedestrian/002175.png: 224x640 7 Cars, 12 Pedestrians, 4.5ms
+image 20/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Pedestrian/005104.png: 224x640 11 Cars, 4.1ms
+image 21/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Person_sitting/002005.png: 224x640 3 Pedestrians, 1 Person_sitting, 3.9ms
+image 22/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Person_sitting/002548.png: 224x640 1 Pedestrian, 5 Person_sittings, 3 Trams, 4.0ms
+image 23/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Person_sitting/004685.png: 224x640 12 Cars, 2 Person_sittings, 4.5ms
+image 24/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Tram/002167.png: 224x640 5 Cars, 1 Cyclist, 1 Tram, 4.1ms
+image 25/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Tram/002619.png: 224x640 1 Car, 1 Tram, 4.0ms
+image 26/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Tram/003469.png: 224x640 2 Cars, 1 Cyclist, 1 Tram, 3.9ms
+image 27/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Truck/003124.png: 224x640 7 Cars, 1 Truck, 1 Pedestrian, 3.9ms
+image 28/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Truck/003809.png: 224x640 2 Cars, 1 Truck, 1 Cyclist, 3.9ms
+image 29/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Truck/006390.png: 224x640 13 Cars, 1 Truck, 2 Pedestrians, 3.9ms
+image 30/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Van/003116.png: 224x640 8 Cars, 1 Van, 3.9ms
+image 31/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Van/005058.png: 224x640 9 Cars, 4 Vans, 2 Trucks, 3.9ms
+image 32/32 /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/difdet/samples_per_class/Van/006136.png: 224x640 5 Cars, 1 Van, 3.9ms
+Speed: 1.0ms preprocess, 6.3ms inference, 3.9ms postprocess per image at shape (1, 3, 224, 640)
+Results saved to [1mfinal_outputs/yolo_kitti_100ep/preds100e5[0m
+💡 Learn more at https://docs.ultralytics.com/modes/predict
+[34m[1mVS Code:[0m view Ultralytics VS Code Extension ⚡ at https://docs.ultralytics.com/integrations/vscode

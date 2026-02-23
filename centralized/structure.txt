@@ -1,0 +1,489 @@
+DiffusionDet Architecture:
+==================================================
+├── backbone: FPN
+│   ├── fpn_lateral2: Conv2d
+│   ├── fpn_output2: Conv2d
+│   ├── fpn_lateral3: Conv2d
+│   ├── fpn_output3: Conv2d
+│   ├── fpn_lateral4: Conv2d
+│   ├── fpn_output4: Conv2d
+│   ├── fpn_lateral5: Conv2d
+│   ├── fpn_output5: Conv2d
+│   ├── top_block: LastLevelMaxPool
+│   ├── bottom_up: ResNet
+│   │   ├── stem: BasicStem
+│   │   ├── res2: Sequential
+│   │   ├── res3: Sequential
+│   │   ├── res4: Sequential
+│   │   ├── res5: Sequential
+├── head: DynamicHead
+│   ├── box_pooler: ROIPooler
+│   │   ├── level_poolers: ModuleList
+│   ├── head_series: ModuleList
+│   │   ├── 0: RCNNHead
+│   │   ├── 1: RCNNHead
+│   │   ├── 2: RCNNHead
+│   │   ├── 3: RCNNHead
+│   │   ├── 4: RCNNHead
+│   │   ├── 5: RCNNHead
+│   ├── time_mlp: Sequential
+│   │   ├── 0: SinusoidalPositionEmbeddings
+│   │   ├── 1: Linear
+│   │   ├── 2: GELU
+│   │   ├── 3: Linear
+├── criterion: SetCriterionDynamicK
+│   ├── matcher: HungarianMatcherDynamicK
+
+Model Summary:
+Total parameters: 168,368,148
+Trainable parameters: 168,145,748
+
+Diffusion Head Structure:
+------------------------------
+├── box_pooler: ROIPooler
+│   ├── level_poolers: ModuleList
+├── head_series: ModuleList
+│   ├── 0: RCNNHead
+│   ├── 1: RCNNHead
+│   ├── 2: RCNNHead
+│   ├── 3: RCNNHead
+│   ├── 4: RCNNHead
+│   ├── 5: RCNNHead
+├── time_mlp: Sequential
+│   ├── 0: SinusoidalPositionEmbeddings
+│   ├── 1: Linear
+│   ├── 2: GELU
+│   ├── 3: Linear
+cd labelled_kitti/
+cd ..
+source setenv.sh
+cd difdet/
+clear
+
+sbatch train_kitti_and_zod_cl_job.sh
+
+scancel -u kiross
+
+squeue -u kiross
+
+
+# DiffusionDet Optimization Process Breakdown
+
+## High-Level Overview
+
+DiffusionDet formulates object detection as a **denoising diffusion process** where:
+- **Forward process**: Ground truth boxes are gradually corrupted with Gaussian noise
+- **Reverse process**: The model learns to denoise random boxes back to object boxes
+
+The key insight is treating bounding boxes as 4D vectors (cx, cy, w, h) and applying diffusion similar to image generation, but adapted for the discrete nature of object detection.
+
+## Training Process Architecture
+
+### 1. **Forward Diffusion Process (Noise Addition)**
+
+From the paper's Equation (1): q(z_t | z_0) = N(z_t | √(ᾱ_t) z_0, (1 - ᾱ_t) I)
+
+
+**Implementation location**: This happens in the training loop where:
+- `z_0` = ground truth boxes (after padding and scaling)
+- `z_t` = noisy boxes at timestep t
+- `ᾱ_t` = cumulative product of alphas (noise schedule)
+
+**Key steps**:
+1. **Box Padding**: Since images have variable numbers of objects, boxes are padded to fixed number `N_train`
+2. **Signal Scaling**: Boxes are scaled by factor (typically 2.0) before noise addition
+3. **Noise Injection**: Gaussian noise added according to cosine schedule
+
+### 2. **Architecture Components**
+
+**Image Encoder**: 
+- ResNet/Swin backbone + FPN
+- Runs once to extract feature representation
+- Output: Multi-scale feature maps
+
+**Detection Decoder**:
+- Takes noisy boxes `z_t` as input (not learnable queries like DETR)
+- Uses RoI Align to crop features from noisy box locations
+- 6-stage cascaded decoder (following DETR/Sparse R-CNN)
+- Predicts clean boxes `z_0` from `z_t`
+
+### 3. **Training Objective**
+
+From Equation (2): L_train = (1/2) ||f_θ(z_t, t) - z_0||²
+**Implementation**: 
+- `f_θ(z_t, t)` = detection decoder output
+- `z_0` = ground truth boxes
+- Loss computed using **set prediction loss** (Hungarian matching)
+
+**Set Prediction Loss Details**:
+- Hungarian algorithm assigns predictions to ground truth
+- Multiple predictions can be assigned to same ground truth (top-k assignment)
+- Combines classification loss + box regression loss (L1 + GIoU)
+
+## Key Implementation Details
+
+### 4. **Signal Scaling Strategy**
+
+**Problem**: Box coordinates are more fragile than dense image representations
+**Solution**: Higher signal-to-noise ratio than image generation
+- Scale factor = 2.0 (vs 1.0 in image generation)
+- Applied as: `boxes = (boxes * 2 - 1) * scale`
+
+### 5. **Ground Truth Padding Strategies**
+
+**Challenge**: Variable number of objects per image
+**Solutions tested**:
+- Repeat existing boxes
+- Concatenate random Gaussian boxes ✓ (best)
+- Concatenate uniform random boxes
+- Concatenate image-sized boxes
+
+### 6. **Noise Schedule**
+
+**Implementation**: Cosine schedule for α_t
+- More aggressive than linear schedule
+- Better suited for the 4D box representation
+- Provides smoother noise transition
+
+### 7. **Loss Computation Flow**
+
+1. **Hungarian Matching**: 
+   - Cost matrix based on classification + box regression costs
+   - Optimal transport assignment using Hungarian algorithm
+   - Multiple predictions assigned to each ground truth (top-k)
+
+2. **Classification Loss**: 
+   - Focal loss or cross-entropy on assigned pairs
+   - Background class for unmatched predictions
+
+3. **Box Regression Loss**:
+   - L1 loss + GIoU loss on assigned pairs
+   - Applied only to positive assignments
+
+## Inference Process
+
+### 8. **Sampling Strategy**
+
+**DDIM Sampling**: Used instead of DDPM for faster inference
+- Deterministic sampling process
+- Fewer steps required (1-8 vs 1000)
+
+**Box Renewal**: 
+- After each step, filter low-confidence predictions
+- Replace with fresh random boxes
+- Aligns inference with training distribution
+
+### 9. **Flexible Evaluation Properties**
+
+**Dynamic Boxes**: Can use different numbers of boxes at inference vs training
+**Iterative Refinement**: Can run multiple denoising steps
+**Progressive Enhancement**: Each step improves predictions
+
+## Mathematical Implementation
+
+### 10. **Noise Addition Formula**
+
+In practice: z_t = √(ᾱ_t) * z_0 + √(1 - ᾱ_t) * ε
+where `ε ~ N(0, I)`
+
+### 11. **Denoising Prediction**
+
+Model predicts `z_0` directly (not noise `ε`): z_0_pred = f_θ(z_t, t, x)
+This differs from standard DDPM which predicts noise.
+
+### 12. **Update Rule (DDIM)**
+
+For inference steps: z_{t-Δ} = √(ᾱ_{t-Δ}) * z_0_pred + √(1 - ᾱ_{t-Δ}) * ε_t
+
+DiffusionDet Architecture:
+==================================================
+├── backbone: FPN
+│   ├── fpn_lateral2: Conv2d
+│   ├── fpn_output2: Conv2d
+│   ├── fpn_lateral3: Conv2d
+│   ├── fpn_output3: Conv2d
+│   ├── fpn_lateral4: Conv2d
+│   ├── fpn_output4: Conv2d
+│   ├── fpn_lateral5: Conv2d
+│   ├── fpn_output5: Conv2d
+│   ├── top_block: LastLevelMaxPool
+│   ├── bottom_up: ResNet
+│   │   ├── stem: BasicStem
+│   │   │   ├── conv1: Conv2d
+│   │   ├── res2: Sequential
+│   │   │   ├── 0: BottleneckBlock
+│   │   │   ├── 1: BottleneckBlock
+│   │   │   ├── 2: BottleneckBlock
+│   │   ├── res3: Sequential
+│   │   │   ├── 0: BottleneckBlock
+│   │   │   ├── 1: BottleneckBlock
+│   │   │   ├── 2: BottleneckBlock
+│   │   │   ├── 3: BottleneckBlock
+│   │   ├── res4: Sequential
+│   │   │   ├── 0: BottleneckBlock
+│   │   │   ├── 1: BottleneckBlock
+│   │   │   ├── 2: BottleneckBlock
+│   │   │   ├── 3: BottleneckBlock
+│   │   │   ├── 4: BottleneckBlock
+│   │   │   ├── 5: BottleneckBlock
+│   │   ├── res5: Sequential
+│   │   │   ├── 0: BottleneckBlock
+│   │   │   ├── 1: BottleneckBlock
+│   │   │   ├── 2: BottleneckBlock
+├── head: DynamicHead
+│   ├── box_pooler: ROIPooler
+│   │   ├── level_poolers: ModuleList
+│   │   │   ├── 0: ROIAlign
+│   │   │   ├── 1: ROIAlign
+│   │   │   ├── 2: ROIAlign
+│   │   │   ├── 3: ROIAlign
+│   ├── head_series: ModuleList
+│   │   ├── 0: RCNNHead
+│   │   │   ├── self_attn: MultiheadAttention
+│   │   │   ├── inst_interact: DynamicConv
+│   │   │   ├── linear1: Linear
+│   │   │   ├── dropout: Dropout
+│   │   │   ├── linear2: Linear
+│   │   │   ├── norm1: LayerNorm
+│   │   │   ├── norm2: LayerNorm
+│   │   │   ├── norm3: LayerNorm
+│   │   │   ├── dropout1: Dropout
+│   │   │   ├── dropout2: Dropout
+│   │   │   ├── dropout3: Dropout
+│   │   │   ├── block_time_mlp: Sequential
+│   │   │   ├── cls_module: ModuleList
+│   │   │   ├── reg_module: ModuleList
+│   │   │   ├── class_logits: Linear
+│   │   │   ├── bboxes_delta: Linear
+│   │   ├── 1: RCNNHead
+│   │   │   ├── self_attn: MultiheadAttention
+│   │   │   ├── inst_interact: DynamicConv
+│   │   │   ├── linear1: Linear
+│   │   │   ├── dropout: Dropout
+│   │   │   ├── linear2: Linear
+│   │   │   ├── norm1: LayerNorm
+│   │   │   ├── norm2: LayerNorm
+│   │   │   ├── norm3: LayerNorm
+│   │   │   ├── dropout1: Dropout
+│   │   │   ├── dropout2: Dropout
+│   │   │   ├── dropout3: Dropout
+│   │   │   ├── block_time_mlp: Sequential
+│   │   │   ├── cls_module: ModuleList
+│   │   │   ├── reg_module: ModuleList
+│   │   │   ├── class_logits: Linear
+│   │   │   ├── bboxes_delta: Linear
+│   │   ├── 2: RCNNHead
+│   │   │   ├── self_attn: MultiheadAttention
+│   │   │   ├── inst_interact: DynamicConv
+│   │   │   ├── linear1: Linear
+│   │   │   ├── dropout: Dropout
+│   │   │   ├── linear2: Linear
+│   │   │   ├── norm1: LayerNorm
+│   │   │   ├── norm2: LayerNorm
+│   │   │   ├── norm3: LayerNorm
+│   │   │   ├── dropout1: Dropout
+│   │   │   ├── dropout2: Dropout
+│   │   │   ├── dropout3: Dropout
+│   │   │   ├── block_time_mlp: Sequential
+│   │   │   ├── cls_module: ModuleList
+│   │   │   ├── reg_module: ModuleList
+│   │   │   ├── class_logits: Linear
+│   │   │   ├── bboxes_delta: Linear
+│   │   ├── 3: RCNNHead
+│   │   │   ├── self_attn: MultiheadAttention
+│   │   │   ├── inst_interact: DynamicConv
+│   │   │   ├── linear1: Linear
+│   │   │   ├── dropout: Dropout
+│   │   │   ├── linear2: Linear
+│   │   │   ├── norm1: LayerNorm
+│   │   │   ├── norm2: LayerNorm
+│   │   │   ├── norm3: LayerNorm
+│   │   │   ├── dropout1: Dropout
+│   │   │   ├── dropout2: Dropout
+│   │   │   ├── dropout3: Dropout
+│   │   │   ├── block_time_mlp: Sequential
+│   │   │   ├── cls_module: ModuleList
+│   │   │   ├── reg_module: ModuleList
+│   │   │   ├── class_logits: Linear
+│   │   │   ├── bboxes_delta: Linear
+│   │   ├── 4: RCNNHead
+│   │   │   ├── self_attn: MultiheadAttention
+│   │   │   ├── inst_interact: DynamicConv
+│   │   │   ├── linear1: Linear
+│   │   │   ├── dropout: Dropout
+│   │   │   ├── linear2: Linear
+│   │   │   ├── norm1: LayerNorm
+│   │   │   ├── norm2: LayerNorm
+│   │   │   ├── norm3: LayerNorm
+│   │   │   ├── dropout1: Dropout
+│   │   │   ├── dropout2: Dropout
+│   │   │   ├── dropout3: Dropout
+│   │   │   ├── block_time_mlp: Sequential
+│   │   │   ├── cls_module: ModuleList
+│   │   │   ├── reg_module: ModuleList
+│   │   │   ├── class_logits: Linear
+│   │   │   ├── bboxes_delta: Linear
+│   │   ├── 5: RCNNHead
+│   │   │   ├── self_attn: MultiheadAttention
+│   │   │   ├── inst_interact: DynamicConv
+│   │   │   ├── linear1: Linear
+│   │   │   ├── dropout: Dropout
+│   │   │   ├── linear2: Linear
+│   │   │   ├── norm1: LayerNorm
+│   │   │   ├── norm2: LayerNorm
+│   │   │   ├── norm3: LayerNorm
+│   │   │   ├── dropout1: Dropout
+│   │   │   ├── dropout2: Dropout
+│   │   │   ├── dropout3: Dropout
+│   │   │   ├── block_time_mlp: Sequential
+│   │   │   ├── cls_module: ModuleList
+│   │   │   ├── reg_module: ModuleList
+│   │   │   ├── class_logits: Linear
+│   │   │   ├── bboxes_delta: Linear
+│   ├── time_mlp: Sequential
+│   │   ├── 0: SinusoidalPositionEmbeddings
+│   │   ├── 1: Linear
+│   │   ├── 2: GELU
+│   │   ├── 3: Linear
+├── criterion: SetCriterionDynamicK
+│   ├── matcher: HungarianMatcherDynamicK
+
+
+DiffusionDet Architecture:
+==================================================
+├── backbone: FPN
+│   ├── fpn_lateral2: Conv2d (out=256, k=(1, 1), s=(1, 1))
+│   ├── fpn_output2: Conv2d (out=256, k=(3, 3), s=(1, 1))
+│   ├── fpn_lateral3: Conv2d (out=256, k=(1, 1), s=(1, 1))
+│   ├── fpn_output3: Conv2d (out=256, k=(3, 3), s=(1, 1))
+│   ├── fpn_lateral4: Conv2d (out=256, k=(1, 1), s=(1, 1))
+│   ├── fpn_output4: Conv2d (out=256, k=(3, 3), s=(1, 1))
+│   ├── fpn_lateral5: Conv2d (out=256, k=(1, 1), s=(1, 1))
+│   ├── fpn_output5: Conv2d (out=256, k=(3, 3), s=(1, 1))
+│   ├── top_block: LastLevelMaxPool
+│   ├── bottom_up: ResNet
+│   │   ├── stem: BasicStem (out=64, s=4)
+│   │   ├── res2: Sequential
+│   │   ├── res3: Sequential
+│   │   ├── res4: Sequential
+│   │   ├── res5: Sequential
+├── head: DynamicHead (heads=6)
+│   ├── box_pooler: ROIPooler (size=(14, 14))
+│   │   ├── level_poolers: ModuleList
+│   ├── head_series: ModuleList
+│   │   ├── 0: RCNNHead
+│   │   ├── 1: RCNNHead
+│   │   ├── 2: RCNNHead
+│   │   ├── 3: RCNNHead
+│   │   ├── 4: RCNNHead
+│   │   ├── 5: RCNNHead
+│   ├── time_mlp: Sequential
+│   │   ├── 0: SinusoidalPositionEmbeddings
+│   │   ├── 1: Linear
+│   │   ├── 2: GELU
+│   │   ├── 3: Linear
+├── criterion: SetCriterionDynamicK
+│   ├── matcher: HungarianMatcherDynamicK
+
+Configuration Details:
+==================================================
+FPN output channels: 256
+
+Available MODEL attributes:
+  DEPRECATED_KEYS
+  IMMUTABLE
+  NEW_ALLOWED
+  RENAMED_KEYS
+  clear
+  clone
+  copy
+  defrost
+  dump
+  freeze
+  fromkeys
+  get
+  is_frozen
+  is_new_allowed
+  items
+  key_is_deprecated
+  key_is_renamed
+  keys
+  load_cfg
+  load_yaml_with_base
+  merge_from_file
+  merge_from_list
+  merge_from_other_cfg
+  pop
+  popitem
+  raise_key_rename_error
+  register_deprecated_key
+  register_renamed_key
+  set_new_allowed
+  setdefault
+  update
+  values
+Input min size test: 800
+Input max size test: 1500
+Input min size train: (640, 704, 768)
+
+Model Dimension Analysis:
+==================================================
+Input size: 800 x 800
+
+Backbone output feature maps:
+  p2: torch.Size([1, 256, 200, 200])
+  p3: torch.Size([1, 256, 100, 100])
+  p4: torch.Size([1, 256, 50, 50])
+  p5: torch.Size([1, 256, 25, 25])
+  p6: torch.Size([1, 256, 13, 13])
+
+Model Summary:
+==================================================
+Total parameters: 168,368,148
+Trainable parameters: 168,145,748
+
+Dynamic Head Details:
+------------------------------
+Number of RCNN heads: 6
+
+First RCNN Head Structure:
+├── self_attn: MultiheadAttention (heads=8, dim=256)
+│   ├── out_proj: NonDynamicallyQuantizableLinear
+├── inst_interact: DynamicConv
+│   ├── dynamic_layer: Linear
+│   ├── norm1: LayerNorm
+│   ├── norm2: LayerNorm
+│   ├── activation: ReLU
+│   ├── out_layer: Linear
+│   ├── norm3: LayerNorm
+├── linear1: Linear
+├── dropout: Dropout
+├── linear2: Linear
+├── norm1: LayerNorm
+├── norm2: LayerNorm
+├── norm3: LayerNorm
+├── dropout1: Dropout
+├── dropout2: Dropout
+├── dropout3: Dropout
+├── block_time_mlp: Sequential
+│   ├── 0: SiLU
+│   ├── 1: Linear
+├── cls_module: ModuleList
+│   ├── 0: Linear
+│   ├── 1: LayerNorm
+│   ├── 2: ReLU
+├── reg_module: ModuleList
+│   ├── 0: Linear
+│   ├── 1: LayerNorm
+│   ├── 2: ReLU
+│   ├── 3: Linear
+│   ├── 4: LayerNorm
+│   ├── 5: ReLU
+│   ├── 6: Linear
+│   ├── 7: LayerNorm
+│   ├── 8: ReLU
+├── class_logits: Linear
+├── bboxes_delta: Linear
+
+ROI Pooler Details:
+Output size: (14, 14)

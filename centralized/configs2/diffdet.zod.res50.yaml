@@ -1,0 +1,138 @@
+# DiffusionDet configuration for KITTI dataset with ResNet-50 backbone
+# This configuration is optimized for training on the KITTI dataset with a ResNet-50 backbone
+# and includes modifications for improved performance and training stability. 
+
+
+# client training configs
+#================================
+VERSION: 2
+
+MODEL:
+  META_ARCHITECTURE: "DiffusionDet"
+  WEIGHTS: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+  # WEIGHTS: "final_outputs/diffdet_zod_v6_cwar40ki/model_0039999.pth" #continued from 40k iterations on v6
+  
+  BACKBONE:
+    NAME: "build_resnet_fpn_backbone"
+  
+  RESNETS:
+    DEPTH: 50
+    STRIDE_IN_1X1: False
+    OUT_FEATURES: ["res2", "res3", "res4", "res5"]
+    NORM: "FrozenBN"
+    
+  FPN:
+    IN_FEATURES: ["res2", "res3", "res4", "res5"]
+    OUT_CHANNELS: 256
+    NORM: ""
+    FUSE_TYPE: "sum"
+  
+  ROI_HEADS:
+    NAME: "DiffusionDetROIHead"
+    IN_FEATURES: ["p2", "p3", "p4", "p5"]
+    NUM_CLASSES: 10
+    
+  DiffusionDet:
+    NUM_PROPOSALS: 600              # Increased from 300 for better performance
+    NUM_CLASSES: 10
+    SAMPLE_STEP: 1                  # Training with 1 step, inference with 4 steps
+  # If using anchors, adjust sizes:
+  ANCHOR_GENERATOR:
+    # SIZES: [[32], [64], [128], [256], [512]]  # original sizes
+    # ASPECT_RATIOS: [[0.5, 1.0, 2.0]]          # original
+    # ASPECT_RATIOS: [[0.1, 0.5, 1.0, 2.0, 4.0]]  # Add just 0.1 and 4.0
+    # SIZES: [[16, 32, 64, 128, 256, 512, 1024]]  # 1024 for large objects
+    SIZES: [[24, 71, 137, 260, 542, 840]] # Adjusted sizes for better coverage
+    # ASPECT_RATIOS: [[0.05, 0.1, 0.15, 0.35, 0.5, 1.0, 1.25, 2.0, 4.0]]  # Add extreme ratios [[0.01, 0.05, 0.1, 0.25, 0.5, 1.0, 1.25, 1.5, 2.0, 4.0]]
+    ASPECT_RATIOS: [
+      [0.5, 1.0, 2.0],        # P2: Standard for small objects
+      [0.01, 0.05, 1.0, 2.0],   # P3: Add poles for medium scale
+      [0.1, 0.5, 1.0, 2.0, 4.0], # P4: Full range for large objects
+      [0.5, 1.0, 2.0, 4.0],   # P5: Wide objects (vehicles)
+      [1.0, 1.25, 2.0, 4.0]         # P6: Only wide ratios for very large
+    ]
+
+DATASETS:
+  TRAIN: ("zod_train_split",)      # We'll register this with the training split
+  TEST: ("zod_val_split",)         # We'll register this with the validation split
+
+# DATASETS:
+#   TRAIN: ("zod_train_subset_1000",)      # We'll register this with the training split
+#   TEST: ("zod_val_subset_200",)         # We'll register this with the validation split
+
+DATALOADER:
+  NUM_WORKERS: 8
+  SAMPLER_TRAIN: "TrainingSampler"
+
+SOLVER:
+  IMS_PER_BATCH: 64                  # Increased from 4 for faster training
+  BASE_LR: .000025                  # Standard learning rate for batch size 6
+  # STEPS: [300, 400]                   # test training - 
+  # MAX_ITER: 500                      # test training
+  STEPS: [90000, 100000]                   # full training - 
+  MAX_ITER: 120000                      # Full training - 
+  GAMMA: 0.1                        # LR decay factor
+  WEIGHT_DECAY: 0.0001
+  WEIGHT_DECAY_NORM: 0.0
+  WARMUP_FACTOR: 0.1
+  WARMUP_ITERS: 10                # 1000 iteration warmup
+  OPTIMIZER: "ADAMW"
+  WARMUP_METHOD: "linear"
+  CHECKPOINT_PERIOD: 40000           # Save every n iterations (more frequent)
+  CLIP_GRADIENTS:
+    ENABLED: True
+    CLIP_TYPE: "value"
+    CLIP_VALUE: 0.1
+  # AMP:
+  #   ENABLED: True
+
+
+INPUT:
+#   MIN_SIZE_TRAIN: [512, 576, 640, 704, 768, 832, 896, 960, 1024]  # Multi-scale training for robustness
+  # MIN_SIZE_TRAIN: [640, 672, 704, 736, 768]  # Multi-scale training for robustness
+  MIN_SIZE_TRAIN: [640, 704, 768]  # Multi-scale training for robustness
+  MAX_SIZE_TRAIN: 1500              #  original zod =3848
+  MIN_SIZE_TEST: 800                # 1500 × (2168/3848) ≈ 845px
+  MAX_SIZE_TEST: 1500               # Match training max size
+#   # larger sizes:
+  # MIN_SIZE_TRAIN: [640, 800, 960, 1120, 1280]   # a few linear steps that all take effect
+  # MAX_SIZE_TRAIN: 2200                     # raise long-side cap
+  # MIN_SIZE_TEST: 1280
+  # MAX_SIZE_TEST: 2200
+
+    # even large:
+  # MIN_SIZE_TRAIN: [640, 800, 960, 1120, 1280, 1440]
+  # MAX_SIZE_TRAIN: 2560
+  # MIN_SIZE_TEST: 1440
+  # MAX_SIZE_TEST: 2560
+  FORMAT: "BGR"
+  
+  # Data Augmentation for better generalization
+  CROP:
+    ENABLED: True
+    TYPE: "relative_range"
+    # SIZE: [0.9, 0.9]
+    # OR better yet:
+    # TYPE: "absolute_range"
+    SIZE: [0.85, 0.95]  # More aggressive cropping = more large objects
+
+TEST:
+  EVAL_PERIOD: 12000                 # Evaluate every n iterations
+  EXPECTED_RESULTS: []
+  DETECTIONS_PER_IMAGE: 200         # Max detections per image
+
+# Output and Logging
+OUTPUT_DIR: "./diffdet_temp_zod"
+SEED: 42
+
+# Performance optimizations
+CUDNN_BENCHMARK: True               # Enable for faster training with fixed input sizes
+
+# Model EMA for better performance
+MODEL_EMA:
+  ENABLED: True                     # Enable Exponential Moving Average
+  DECAY: 0.9999
+
+
+# server training configs
+#================================

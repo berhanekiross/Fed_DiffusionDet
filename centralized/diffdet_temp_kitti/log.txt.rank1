@@ -1,0 +1,872 @@
+[09/25 20:44:39] detectron2 INFO: Rank of current process: 1. World size: 2
+[09/25 20:44:44] detectron2 INFO: Environment info:
+-------------------------------  ----------------------------------------------------------------------------------------------------------------
+sys.platform                     linux
+Python                           3.11.3 (main, Jan 26 2024, 21:22:48) [GCC 12.3.0]
+numpy                            1.26.4
+detectron2                       0.6 @/mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/vyolo/lib/python3.11/site-packages/detectron2
+Compiler                         GCC 12.3
+CUDA compiler                    CUDA 12.1
+detectron2 arch flags            7.5
+DETECTRON2_ENV_MODULE            <not set>
+PyTorch                          2.1.2 @/apps/Arch/software/PyTorch/2.1.2-foss-2023a-CUDA-12.1.1/lib/python3.11/site-packages/torch
+PyTorch debug build              False
+torch._C._GLIBCXX_USE_CXX11_ABI  True
+GPU available                    Yes
+GPU 0,1                          NVIDIA A100-SXM4-80GB (arch=8.0)
+Driver version                   580.65.06
+CUDA_HOME                        /apps/Common/software/CUDA/12.1.1
+Pillow                           9.5.0
+torchvision                      0.16.2 @/apps/Arch/software/PyTorch-bundle/2.1.2-foss-2023a-CUDA-12.1.1/lib/python3.11/site-packages/torchvision
+torchvision arch flags           8.0, 8.6
+fvcore                           0.1.5.post20221221
+iopath                           0.1.9
+cv2                              4.9.0
+-------------------------------  ----------------------------------------------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 12.3
+  - C++ Version: 201703
+  - Intel(R) MKL-DNN v3.1.1 (Git Hash N/A)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - LAPACK is enabled (usually provided by MKL)
+  - NNPACK is enabled
+  - CPU capability usage: AVX512
+  - CUDA Runtime 12.1
+  - NVCC architecture flags: -gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86
+  - CuDNN 8.9.2
+  - Magma 2.7.2
+  - Build settings: BLAS_INFO=flexi, BUILD_TYPE=Release, CUDA_VERSION=12.1, CUDNN_VERSION=8.9.2, CXX_COMPILER=/apps/Arch/software/GCCcore/12.3.0/bin/g++, CXX_FLAGS=-O2 -ftree-vectorize -march=native -fno-math-errno -D_GLIBCXX_USE_CXX11_ABI=1 -Wno-free-nonheap-object -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOROCTRACER -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=range-loop-construct -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-function -Wno-unused-result -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=old-style-cast -Wno-invalid-partial-specialization -Wno-unused-private-field -Wno-aligned-allocation-unavailable -Wno-missing-braces -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Werror=cast-function-type -Wno-stringop-overflow, LAPACK_INFO=flexi, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_DISABLE_GPU_ASSERTS=ON, TORCH_VERSION=2.1.2, USE_CUDA=1, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKLDNN=ON, USE_MPI=ON, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, 
+
+[09/25 20:44:44] detectron2 INFO: Command line arguments: Namespace(config_file='configs2/diffdet.kitti.res50.yaml', resume=False, eval_only=False, num_gpus=2, num_machines=1, machine_rank=0, dist_url='tcp://127.0.0.1:63684', opts=['SOLVER.IMS_PER_BATCH', '32'])
+[09/25 20:44:44] detectron2 INFO: Contents of args.config_file=configs2/diffdet.kitti.res50.yaml:
+[38;5;242m# DiffusionDet configuration for KITTI dataset with ResNet-50 backbone[39m
+[38;5;242m# This configuration is optimized for training on the KITTI dataset with a ResNet-50 backbone[39m
+[38;5;242m# and includes modifications for improved performance and training stability. [39m
+
+
+[38;5;242m# client training configs[39m
+[38;5;242m#================================[39m
+[38;5;197mVERSION[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m2[39m
+
+[38;5;197mMODEL[39m[38;5;15m:[39m
+[38;5;15m  [39m[38;5;197mMETA_ARCHITECTURE[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mDiffusionDet[39m[38;5;186m"[39m
+[38;5;15m  [39m[38;5;197mWEIGHTS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mdetectron2://ImageNetPretrained/MSRA/R-50.pkl[39m[38;5;186m"[39m
+[38;5;15m  [39m
+[38;5;15m  [39m[38;5;197mBACKBONE[39m[38;5;15m:[39m
+[38;5;15m    [39m[38;5;197mNAME[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mbuild_resnet_fpn_backbone[39m[38;5;186m"[39m
+[38;5;15m  [39m
+[38;5;15m  [39m[38;5;197mRESNETS[39m[38;5;15m:[39m
+[38;5;15m    [39m[38;5;197mDEPTH[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m50[39m
+[38;5;15m    [39m[38;5;197mSTRIDE_IN_1X1[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mFalse[39m
+[38;5;15m    [39m[38;5;197mOUT_FEATURES[39m[38;5;15m:[39m[38;5;15m [39m[38;5;15m[[39m[38;5;186m"[39m[38;5;186mres2[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres3[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres4[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres5[39m[38;5;186m"[39m[38;5;15m][39m
+[38;5;15m    [39m[38;5;197mNORM[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mFrozenBN[39m[38;5;186m"[39m
+[38;5;15m    [39m
+[38;5;15m  [39m[38;5;197mFPN[39m[38;5;15m:[39m
+[38;5;15m    [39m[38;5;197mIN_FEATURES[39m[38;5;15m:[39m[38;5;15m [39m[38;5;15m[[39m[38;5;186m"[39m[38;5;186mres2[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres3[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres4[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres5[39m[38;5;186m"[39m[38;5;15m][39m
+[38;5;15m    [39m[38;5;197mOUT_CHANNELS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m256[39m
+[38;5;15m    [39m[38;5;197mNORM[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186m"[39m
+[38;5;15m    [39m[38;5;197mFUSE_TYPE[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186msum[39m[38;5;186m"[39m
+[38;5;15m  [39m
+[38;5;15m  [39m[38;5;197mROI_HEADS[39m[38;5;15m:[39m
+[38;5;15m    [39m[38;5;197mNAME[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mDiffusionDetROIHead[39m[38;5;186m"[39m
+[38;5;15m    [39m[38;5;197mIN_FEATURES[39m[38;5;15m:[39m[38;5;15m [39m[38;5;15m[[39m[38;5;186m"[39m[38;5;186mp2[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mp3[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mp4[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mp5[39m[38;5;186m"[39m[38;5;15m][39m
+[38;5;15m    [39m[38;5;197mNUM_CLASSES[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m7[39m
+[38;5;15m    [39m
+[38;5;15m  [39m[38;5;197mDiffusionDet[39m[38;5;15m:[39m
+[38;5;15m    [39m[38;5;197mNUM_PROPOSALS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m800[39m[38;5;15m              [39m[38;5;242m# Increased from 300 for better performance[39m
+[38;5;15m    [39m[38;5;197mNUM_CLASSES[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m7[39m
+[38;5;15m    [39m[38;5;197mSAMPLE_STEP[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m1[39m[38;5;15m                  [39m[38;5;242m# Training with 1 step, inference with 4 steps[39m
+
+[38;5;242m# DATASETS:[39m
+[38;5;242m#   TRAIN: ("zod_train_split",)      # We'll register this with the training split[39m
+[38;5;242m#   TEST: ("zod_val_split",)         # We'll register this with the validation split[39m
+
+[38;5;197mDATASETS[39m[38;5;15m:[39m
+[38;5;15m  [39m[38;5;197mTRAIN[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m("kitti_train_split",)[39m[38;5;15m      [39m[38;5;242m# We'll register this with the training split[39m
+[38;5;15m  [39m[38;5;197mTEST[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m("kitti_val_split",)[39m
+
+[38;5;197mDATALOADER[39m[38;5;15m:[39m
+[38;5;15m  [39m[38;5;197mNUM_WORKERS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m4[39m
+[38;5;15m  [39m[38;5;197mSAMPLER_TRAIN[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mTrainingSampler[39m[38;5;186m"[39m
+
+[38;5;197mSOLVER[39m[38;5;15m:[39m
+[38;5;15m  [39m[38;5;197mIMS_PER_BATCH[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m8[39m[38;5;15m                  [39m[38;5;242m# Increased from 4 for faster training[39m
+[38;5;15m  [39m[38;5;197mBASE_LR[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m.000025[39m[38;5;15m                   [39m[38;5;242m# Standard learning rate for batch size 6[39m
+[38;5;15m  [39m[38;5;197mSTEPS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;15m[[39m[38;5;15m15000[39m[38;5;15m,[39m[38;5;15m [39m[38;5;15m21000[39m[38;5;15m][39m[38;5;15m             [39m[38;5;242m# Learning rate decay at 50k and 70k iterations[39m
+[38;5;15m  [39m[38;5;197mMAX_ITER[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m23438[39m[38;5;15m                   [39m[38;5;242m# Full training - approximately 150 epochs on KITTI[39m
+[38;5;15m  [39m[38;5;197mGAMMA[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.1[39m[38;5;15m                        [39m[38;5;242m# LR decay factor[39m
+[38;5;15m  [39m[38;5;197mWEIGHT_DECAY[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.0001[39m
+[38;5;15m  [39m[38;5;197mWEIGHT_DECAY_NORM[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.0[39m
+[38;5;15m  [39m[38;5;197mWARMUP_FACTOR[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.1[39m
+[38;5;15m  [39m[38;5;197mWARMUP_ITERS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m10[39m[38;5;15m                [39m[38;5;242m# 1000 iteration warmup[39m
+[38;5;15m  [39m[38;5;197mOPTIMIZER[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mADAMW[39m[38;5;186m"[39m
+[38;5;15m  [39m[38;5;197mWARMUP_METHOD[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mlinear[39m[38;5;186m"[39m
+[38;5;15m  [39m[38;5;197mCHECKPOINT_PERIOD[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m30000[39m[38;5;15m           [39m[38;5;242m# Save every 2000 iterations (more frequent)[39m
+[38;5;15m  [39m[38;5;197mCLIP_GRADIENTS[39m[38;5;15m:[39m
+[38;5;15m    [39m[38;5;197mENABLED[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mTrue[39m
+[38;5;15m    [39m[38;5;197mCLIP_TYPE[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mvalue[39m[38;5;186m"[39m
+[38;5;15m    [39m[38;5;197mCLIP_VALUE[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.1[39m
+
+[38;5;242m# INPUT:[39m
+[38;5;242m#   MIN_SIZE_TRAIN: [640, 672, 704, 736, 768]  # Multi-scale training for robustness[39m
+[38;5;242m#   MAX_SIZE_TRAIN: 1200              # Increased for better detection quality[39m
+[38;5;242m#   MIN_SIZE_TEST: 800                # Standard test size[39m
+[38;5;242m#   MAX_SIZE_TEST: 1200               # Match training max size[39m
+[38;5;242m#   FORMAT: "BGR"[39m
+[38;5;197mINPUT[39m[38;5;15m:[39m
+[38;5;15m  [39m[38;5;197mMIN_SIZE_TRAIN[39m[38;5;15m:[39m[38;5;15m [39m[38;5;15m[[39m[38;5;15m632[39m[38;5;15m,[39m[38;5;15m [39m[38;5;15m640[39m[38;5;15m][39m
+[38;5;15m  [39m[38;5;197mMAX_SIZE_TRAIN[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m640[39m[38;5;15m              [39m
+[38;5;15m  [39m[38;5;197mMIN_SIZE_TEST[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m640[39m[38;5;15m                [39m
+[38;5;15m  [39m[38;5;197mMAX_SIZE_TEST[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m640[39m[38;5;15m    [39m
+[38;5;15m  [39m[38;5;197mFORMAT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mBGR[39m[38;5;186m"[39m
+[38;5;15m  [39m[38;5;242m# Data Augmentation for better generalization[39m
+[38;5;15m  [39m[38;5;197mCROP[39m[38;5;15m:[39m
+[38;5;15m    [39m[38;5;197mENABLED[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mFalse[39m
+[38;5;15m    [39m[38;5;242m# TYPE: "relative_range"[39m
+[38;5;15m    [39m[38;5;242m# SIZE: [0.9, 0.9][39m
+
+[38;5;197mTEST[39m[38;5;15m:[39m
+[38;5;15m  [39m[38;5;197mEVAL_PERIOD[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m1000[39m[38;5;15m                 [39m[38;5;242m# Evaluate every 2000 iterations[39m
+[38;5;15m  [39m[38;5;197mEXPECTED_RESULTS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;15m[[39m[38;5;15m][39m
+[38;5;15m  [39m[38;5;197mDETECTIONS_PER_IMAGE[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m100[39m[38;5;15m         [39m[38;5;242m# Max detections per image[39m
+
+[38;5;242m# Output and Logging[39m
+[38;5;242m# OUTPUT_DIR: "./output/kitti_res50_90kIter"[39m
+[38;5;197mOUTPUT_DIR[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186m./diffdet_temp_kitti[39m[38;5;186m"[39m
+[38;5;197mSEED[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m42[39m
+
+[38;5;242m# Performance optimizations[39m
+[38;5;197mCUDNN_BENCHMARK[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mTrue[39m[38;5;15m               [39m[38;5;242m# Enable for faster training with fixed input sizes[39m
+
+[38;5;242m# Model EMA for better performance[39m
+[38;5;197mMODEL_EMA[39m[38;5;15m:[39m
+[38;5;15m  [39m[38;5;197mENABLED[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mTrue[39m[38;5;15m                     [39m[38;5;242m# Enable Exponential Moving Average[39m
+[38;5;15m  [39m[38;5;197mDECAY[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.9999[39m
+
+
+[38;5;242m# server training configs[39m
+[38;5;242m#================================[39m
+
+[09/25 20:44:47] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/25 20:44:47] detectron2.data.datasets.coco INFO: Loaded 5984 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_train_fixed_dimensions.json
+[09/25 20:44:47] detectron2.data.build INFO: Removed 0 images with no usable annotations. 5984 images left.
+[09/25 20:44:47] detectron2.data.build INFO: Distribution of instances among all 7 categories:
+|  category  | #instances   |   category    | #instances   |  category  | #instances   |
+|:----------:|:-------------|:-------------:|:-------------|:----------:|:-------------|
+|    Car     | 23080        |      Van      | 2317         |   Truck    | 873          |
+| Pedestrian | 3591         | Person_sitt.. | 188          |  Cyclist   | 1325         |
+|    Tram    | 406          |               |              |            |              |
+|   total    | 31780        |               |              |            |              |
+[09/25 20:44:47] detectron2.data.build INFO: Using training sampler TrainingSampler
+[09/25 20:44:47] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/25 20:44:47] detectron2.data.common INFO: Serializing 5984 elements to byte tensors and concatenating them all ...
+[09/25 20:44:47] detectron2.data.common INFO: Serialized dataset takes 3.66 MiB
+[09/25 20:44:47] detectron2.data.build INFO: Making batched data loader with batch_size=16
+[09/25 20:44:47] detectron2.checkpoint.detection_checkpoint INFO: [DetectionCheckpointer] Loading from detectron2://ImageNetPretrained/MSRA/R-50.pkl ...
+[09/25 20:44:47] fvcore.common.checkpoint INFO: [Checkpointer] Loading from /cephyr/users/kiross/Alvis/.torch/iopath_cache/detectron2/ImageNetPretrained/MSRA/R-50.pkl ...
+[09/25 20:44:48] detectron2.checkpoint.c2_model_loading INFO: Renaming Caffe2 weights ......
+[09/25 20:44:48] detectron2.checkpoint.c2_model_loading INFO: Following weights matched with submodule backbone.bottom_up - Total num: 54
+[09/25 20:44:48] fvcore.common.checkpoint WARNING: Some model parameters or buffers are not found in the checkpoint:
+alphas_cumprod
+alphas_cumprod_prev
+backbone.fpn_lateral2.{bias, weight}
+backbone.fpn_lateral3.{bias, weight}
+backbone.fpn_lateral4.{bias, weight}
+backbone.fpn_lateral5.{bias, weight}
+backbone.fpn_output2.{bias, weight}
+backbone.fpn_output3.{bias, weight}
+backbone.fpn_output4.{bias, weight}
+backbone.fpn_output5.{bias, weight}
+betas
+head.head_series.0.bboxes_delta.{bias, weight}
+head.head_series.0.block_time_mlp.1.{bias, weight}
+head.head_series.0.class_logits.{bias, weight}
+head.head_series.0.cls_module.0.weight
+head.head_series.0.cls_module.1.{bias, weight}
+head.head_series.0.inst_interact.dynamic_layer.{bias, weight}
+head.head_series.0.inst_interact.norm1.{bias, weight}
+head.head_series.0.inst_interact.norm2.{bias, weight}
+head.head_series.0.inst_interact.norm3.{bias, weight}
+head.head_series.0.inst_interact.out_layer.{bias, weight}
+head.head_series.0.linear1.{bias, weight}
+head.head_series.0.linear2.{bias, weight}
+head.head_series.0.norm1.{bias, weight}
+head.head_series.0.norm2.{bias, weight}
+head.head_series.0.norm3.{bias, weight}
+head.head_series.0.reg_module.0.weight
+head.head_series.0.reg_module.1.{bias, weight}
+head.head_series.0.reg_module.3.weight
+head.head_series.0.reg_module.4.{bias, weight}
+head.head_series.0.reg_module.6.weight
+head.head_series.0.reg_module.7.{bias, weight}
+head.head_series.0.self_attn.out_proj.{bias, weight}
+head.head_series.0.self_attn.{in_proj_bias, in_proj_weight}
+head.head_series.1.bboxes_delta.{bias, weight}
+head.head_series.1.block_time_mlp.1.{bias, weight}
+head.head_series.1.class_logits.{bias, weight}
+head.head_series.1.cls_module.0.weight
+head.head_series.1.cls_module.1.{bias, weight}
+head.head_series.1.inst_interact.dynamic_layer.{bias, weight}
+head.head_series.1.inst_interact.norm1.{bias, weight}
+head.head_series.1.inst_interact.norm2.{bias, weight}
+head.head_series.1.inst_interact.norm3.{bias, weight}
+head.head_series.1.inst_interact.out_layer.{bias, weight}
+head.head_series.1.linear1.{bias, weight}
+head.head_series.1.linear2.{bias, weight}
+head.head_series.1.norm1.{bias, weight}
+head.head_series.1.norm2.{bias, weight}
+head.head_series.1.norm3.{bias, weight}
+head.head_series.1.reg_module.0.weight
+head.head_series.1.reg_module.1.{bias, weight}
+head.head_series.1.reg_module.3.weight
+head.head_series.1.reg_module.4.{bias, weight}
+head.head_series.1.reg_module.6.weight
+head.head_series.1.reg_module.7.{bias, weight}
+head.head_series.1.self_attn.out_proj.{bias, weight}
+head.head_series.1.self_attn.{in_proj_bias, in_proj_weight}
+head.head_series.2.bboxes_delta.{bias, weight}
+head.head_series.2.block_time_mlp.1.{bias, weight}
+head.head_series.2.class_logits.{bias, weight}
+head.head_series.2.cls_module.0.weight
+head.head_series.2.cls_module.1.{bias, weight}
+head.head_series.2.inst_interact.dynamic_layer.{bias, weight}
+head.head_series.2.inst_interact.norm1.{bias, weight}
+head.head_series.2.inst_interact.norm2.{bias, weight}
+head.head_series.2.inst_interact.norm3.{bias, weight}
+head.head_series.2.inst_interact.out_layer.{bias, weight}
+head.head_series.2.linear1.{bias, weight}
+head.head_series.2.linear2.{bias, weight}
+head.head_series.2.norm1.{bias, weight}
+head.head_series.2.norm2.{bias, weight}
+head.head_series.2.norm3.{bias, weight}
+head.head_series.2.reg_module.0.weight
+head.head_series.2.reg_module.1.{bias, weight}
+head.head_series.2.reg_module.3.weight
+head.head_series.2.reg_module.4.{bias, weight}
+head.head_series.2.reg_module.6.weight
+head.head_series.2.reg_module.7.{bias, weight}
+head.head_series.2.self_attn.out_proj.{bias, weight}
+head.head_series.2.self_attn.{in_proj_bias, in_proj_weight}
+head.head_series.3.bboxes_delta.{bias, weight}
+head.head_series.3.block_time_mlp.1.{bias, weight}
+head.head_series.3.class_logits.{bias, weight}
+head.head_series.3.cls_module.0.weight
+head.head_series.3.cls_module.1.{bias, weight}
+head.head_series.3.inst_interact.dynamic_layer.{bias, weight}
+head.head_series.3.inst_interact.norm1.{bias, weight}
+head.head_series.3.inst_interact.norm2.{bias, weight}
+head.head_series.3.inst_interact.norm3.{bias, weight}
+head.head_series.3.inst_interact.out_layer.{bias, weight}
+head.head_series.3.linear1.{bias, weight}
+head.head_series.3.linear2.{bias, weight}
+head.head_series.3.norm1.{bias, weight}
+head.head_series.3.norm2.{bias, weight}
+head.head_series.3.norm3.{bias, weight}
+head.head_series.3.reg_module.0.weight
+head.head_series.3.reg_module.1.{bias, weight}
+head.head_series.3.reg_module.3.weight
+head.head_series.3.reg_module.4.{bias, weight}
+head.head_series.3.reg_module.6.weight
+head.head_series.3.reg_module.7.{bias, weight}
+head.head_series.3.self_attn.out_proj.{bias, weight}
+head.head_series.3.self_attn.{in_proj_bias, in_proj_weight}
+head.head_series.4.bboxes_delta.{bias, weight}
+head.head_series.4.block_time_mlp.1.{bias, weight}
+head.head_series.4.class_logits.{bias, weight}
+head.head_series.4.cls_module.0.weight
+head.head_series.4.cls_module.1.{bias, weight}
+head.head_series.4.inst_interact.dynamic_layer.{bias, weight}
+head.head_series.4.inst_interact.norm1.{bias, weight}
+head.head_series.4.inst_interact.norm2.{bias, weight}
+head.head_series.4.inst_interact.norm3.{bias, weight}
+head.head_series.4.inst_interact.out_layer.{bias, weight}
+head.head_series.4.linear1.{bias, weight}
+head.head_series.4.linear2.{bias, weight}
+head.head_series.4.norm1.{bias, weight}
+head.head_series.4.norm2.{bias, weight}
+head.head_series.4.norm3.{bias, weight}
+head.head_series.4.reg_module.0.weight
+head.head_series.4.reg_module.1.{bias, weight}
+head.head_series.4.reg_module.3.weight
+head.head_series.4.reg_module.4.{bias, weight}
+head.head_series.4.reg_module.6.weight
+head.head_series.4.reg_module.7.{bias, weight}
+head.head_series.4.self_attn.out_proj.{bias, weight}
+head.head_series.4.self_attn.{in_proj_bias, in_proj_weight}
+head.head_series.5.bboxes_delta.{bias, weight}
+head.head_series.5.block_time_mlp.1.{bias, weight}
+head.head_series.5.class_logits.{bias, weight}
+head.head_series.5.cls_module.0.weight
+head.head_series.5.cls_module.1.{bias, weight}
+head.head_series.5.inst_interact.dynamic_layer.{bias, weight}
+head.head_series.5.inst_interact.norm1.{bias, weight}
+head.head_series.5.inst_interact.norm2.{bias, weight}
+head.head_series.5.inst_interact.norm3.{bias, weight}
+head.head_series.5.inst_interact.out_layer.{bias, weight}
+head.head_series.5.linear1.{bias, weight}
+head.head_series.5.linear2.{bias, weight}
+head.head_series.5.norm1.{bias, weight}
+head.head_series.5.norm2.{bias, weight}
+head.head_series.5.norm3.{bias, weight}
+head.head_series.5.reg_module.0.weight
+head.head_series.5.reg_module.1.{bias, weight}
+head.head_series.5.reg_module.3.weight
+head.head_series.5.reg_module.4.{bias, weight}
+head.head_series.5.reg_module.6.weight
+head.head_series.5.reg_module.7.{bias, weight}
+head.head_series.5.self_attn.out_proj.{bias, weight}
+head.head_series.5.self_attn.{in_proj_bias, in_proj_weight}
+head.time_mlp.1.{bias, weight}
+head.time_mlp.3.{bias, weight}
+log_one_minus_alphas_cumprod
+posterior_log_variance_clipped
+posterior_mean_coef1
+posterior_mean_coef2
+posterior_variance
+sqrt_alphas_cumprod
+sqrt_one_minus_alphas_cumprod
+sqrt_recip_alphas_cumprod
+sqrt_recipm1_alphas_cumprod
+[09/25 20:44:48] fvcore.common.checkpoint WARNING: The checkpoint state_dict contains keys that are not used by the model:
+  fc1000.{bias, weight}
+  stem.conv1.bias
+[09/25 20:44:48] detectron2.engine.train_loop INFO: Starting training from iteration 0
+[09/25 21:27:25] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/25 21:27:25] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/25 21:27:25] detectron2.data.build INFO: Distribution of instances among all 7 categories:
+|  category  | #instances   |   category    | #instances   |  category  | #instances   |
+|:----------:|:-------------|:-------------:|:-------------|:----------:|:-------------|
+|    Car     | 5662         |      Van      | 597          |   Truck    | 221          |
+| Pedestrian | 896          | Person_sitt.. | 34           |  Cyclist   | 302          |
+|    Tram    | 105          |               |              |            |              |
+|   total    | 7817         |               |              |            |              |
+[09/25 21:27:25] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/25 21:27:25] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/25 21:27:25] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/25 21:27:25] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/25 21:27:25] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/25 21:27:25] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/25 21:27:32] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0009 s/iter. Inference: 0.0627 s/iter. Eval: 0.0005 s/iter. Total: 0.0642 s/iter. ETA=0:00:47
+[09/25 21:27:37] detectron2.evaluation.evaluator INFO: Inference done 88/748. Dataloading: 0.0016 s/iter. Inference: 0.0618 s/iter. Eval: 0.0017 s/iter. Total: 0.0652 s/iter. ETA=0:00:43
+[09/25 21:27:42] detectron2.evaluation.evaluator INFO: Inference done 167/748. Dataloading: 0.0016 s/iter. Inference: 0.0616 s/iter. Eval: 0.0011 s/iter. Total: 0.0643 s/iter. ETA=0:00:37
+[09/25 21:27:47] detectron2.evaluation.evaluator INFO: Inference done 244/748. Dataloading: 0.0016 s/iter. Inference: 0.0623 s/iter. Eval: 0.0008 s/iter. Total: 0.0647 s/iter. ETA=0:00:32
+[09/25 21:27:52] detectron2.evaluation.evaluator INFO: Inference done 323/748. Dataloading: 0.0016 s/iter. Inference: 0.0621 s/iter. Eval: 0.0007 s/iter. Total: 0.0644 s/iter. ETA=0:00:27
+[09/25 21:27:57] detectron2.evaluation.evaluator INFO: Inference done 403/748. Dataloading: 0.0016 s/iter. Inference: 0.0619 s/iter. Eval: 0.0006 s/iter. Total: 0.0642 s/iter. ETA=0:00:22
+[09/25 21:28:02] detectron2.evaluation.evaluator INFO: Inference done 479/748. Dataloading: 0.0016 s/iter. Inference: 0.0619 s/iter. Eval: 0.0009 s/iter. Total: 0.0645 s/iter. ETA=0:00:17
+[09/25 21:28:07] detectron2.evaluation.evaluator INFO: Inference done 558/748. Dataloading: 0.0015 s/iter. Inference: 0.0619 s/iter. Eval: 0.0008 s/iter. Total: 0.0643 s/iter. ETA=0:00:12
+[09/25 21:28:12] detectron2.evaluation.evaluator INFO: Inference done 637/748. Dataloading: 0.0015 s/iter. Inference: 0.0619 s/iter. Eval: 0.0008 s/iter. Total: 0.0642 s/iter. ETA=0:00:07
+[09/25 21:28:17] detectron2.evaluation.evaluator INFO: Inference done 716/748. Dataloading: 0.0015 s/iter. Inference: 0.0618 s/iter. Eval: 0.0007 s/iter. Total: 0.0641 s/iter. ETA=0:00:02
+[09/25 21:28:20] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:48.364295 (0.065093 s / iter per device, on 2 devices)
+[09/25 21:28:20] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.061822 s / iter per device, on 2 devices)
+[09/25 22:10:16] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/25 22:10:16] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/25 22:10:16] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/25 22:10:16] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/25 22:10:16] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/25 22:10:16] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/25 22:10:16] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/25 22:10:16] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/25 22:10:23] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0011 s/iter. Inference: 0.0621 s/iter. Eval: 0.0004 s/iter. Total: 0.0636 s/iter. ETA=0:00:46
+[09/25 22:10:28] detectron2.evaluation.evaluator INFO: Inference done 91/748. Dataloading: 0.0016 s/iter. Inference: 0.0609 s/iter. Eval: 0.0003 s/iter. Total: 0.0629 s/iter. ETA=0:00:41
+[09/25 22:10:33] detectron2.evaluation.evaluator INFO: Inference done 169/748. Dataloading: 0.0016 s/iter. Inference: 0.0610 s/iter. Eval: 0.0011 s/iter. Total: 0.0637 s/iter. ETA=0:00:36
+[09/25 22:10:38] detectron2.evaluation.evaluator INFO: Inference done 249/748. Dataloading: 0.0016 s/iter. Inference: 0.0610 s/iter. Eval: 0.0009 s/iter. Total: 0.0635 s/iter. ETA=0:00:31
+[09/25 22:10:43] detectron2.evaluation.evaluator INFO: Inference done 329/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0007 s/iter. Total: 0.0634 s/iter. ETA=0:00:26
+[09/25 22:10:48] detectron2.evaluation.evaluator INFO: Inference done 407/748. Dataloading: 0.0016 s/iter. Inference: 0.0610 s/iter. Eval: 0.0010 s/iter. Total: 0.0636 s/iter. ETA=0:00:21
+[09/25 22:10:53] detectron2.evaluation.evaluator INFO: Inference done 486/748. Dataloading: 0.0016 s/iter. Inference: 0.0611 s/iter. Eval: 0.0009 s/iter. Total: 0.0636 s/iter. ETA=0:00:16
+[09/25 22:10:58] detectron2.evaluation.evaluator INFO: Inference done 566/748. Dataloading: 0.0016 s/iter. Inference: 0.0611 s/iter. Eval: 0.0008 s/iter. Total: 0.0635 s/iter. ETA=0:00:11
+[09/25 22:11:03] detectron2.evaluation.evaluator INFO: Inference done 643/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0010 s/iter. Total: 0.0637 s/iter. ETA=0:00:06
+[09/25 22:11:08] detectron2.evaluation.evaluator INFO: Inference done 723/748. Dataloading: 0.0015 s/iter. Inference: 0.0610 s/iter. Eval: 0.0009 s/iter. Total: 0.0636 s/iter. ETA=0:00:01
+[09/25 22:11:10] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.739654 (0.064253 s / iter per device, on 2 devices)
+[09/25 22:11:10] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.061058 s / iter per device, on 2 devices)
+[09/25 22:53:06] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/25 22:53:06] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/25 22:53:06] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/25 22:53:06] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/25 22:53:06] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/25 22:53:06] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/25 22:53:06] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/25 22:53:06] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/25 22:53:13] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0009 s/iter. Inference: 0.0609 s/iter. Eval: 0.0003 s/iter. Total: 0.0621 s/iter. ETA=0:00:45
+[09/25 22:53:18] detectron2.evaluation.evaluator INFO: Inference done 91/748. Dataloading: 0.0015 s/iter. Inference: 0.0610 s/iter. Eval: 0.0003 s/iter. Total: 0.0629 s/iter. ETA=0:00:41
+[09/25 22:53:23] detectron2.evaluation.evaluator INFO: Inference done 169/748. Dataloading: 0.0015 s/iter. Inference: 0.0618 s/iter. Eval: 0.0003 s/iter. Total: 0.0637 s/iter. ETA=0:00:36
+[09/25 22:53:28] detectron2.evaluation.evaluator INFO: Inference done 249/748. Dataloading: 0.0016 s/iter. Inference: 0.0615 s/iter. Eval: 0.0003 s/iter. Total: 0.0634 s/iter. ETA=0:00:31
+[09/25 22:53:33] detectron2.evaluation.evaluator INFO: Inference done 329/748. Dataloading: 0.0015 s/iter. Inference: 0.0614 s/iter. Eval: 0.0003 s/iter. Total: 0.0633 s/iter. ETA=0:00:26
+[09/25 22:53:38] detectron2.evaluation.evaluator INFO: Inference done 407/748. Dataloading: 0.0016 s/iter. Inference: 0.0616 s/iter. Eval: 0.0003 s/iter. Total: 0.0635 s/iter. ETA=0:00:21
+[09/25 22:53:43] detectron2.evaluation.evaluator INFO: Inference done 487/748. Dataloading: 0.0016 s/iter. Inference: 0.0615 s/iter. Eval: 0.0003 s/iter. Total: 0.0634 s/iter. ETA=0:00:16
+[09/25 22:53:48] detectron2.evaluation.evaluator INFO: Inference done 567/748. Dataloading: 0.0016 s/iter. Inference: 0.0614 s/iter. Eval: 0.0003 s/iter. Total: 0.0634 s/iter. ETA=0:00:11
+[09/25 22:53:53] detectron2.evaluation.evaluator INFO: Inference done 647/748. Dataloading: 0.0016 s/iter. Inference: 0.0617 s/iter. Eval: 0.0003 s/iter. Total: 0.0636 s/iter. ETA=0:00:06
+[09/25 22:53:58] detectron2.evaluation.evaluator INFO: Inference done 727/748. Dataloading: 0.0016 s/iter. Inference: 0.0616 s/iter. Eval: 0.0003 s/iter. Total: 0.0635 s/iter. ETA=0:00:01
+[09/25 22:54:00] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.693151 (0.064190 s / iter per device, on 2 devices)
+[09/25 22:54:00] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.061570 s / iter per device, on 2 devices)
+[09/25 23:35:59] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/25 23:35:59] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/25 23:35:59] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/25 23:35:59] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/25 23:35:59] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/25 23:35:59] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/25 23:35:59] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/25 23:35:59] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/25 23:36:06] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0010 s/iter. Inference: 0.0610 s/iter. Eval: 0.0003 s/iter. Total: 0.0624 s/iter. ETA=0:00:45
+[09/25 23:36:11] detectron2.evaluation.evaluator INFO: Inference done 91/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0003 s/iter. Total: 0.0630 s/iter. ETA=0:00:41
+[09/25 23:36:16] detectron2.evaluation.evaluator INFO: Inference done 170/748. Dataloading: 0.0015 s/iter. Inference: 0.0613 s/iter. Eval: 0.0003 s/iter. Total: 0.0631 s/iter. ETA=0:00:36
+[09/25 23:36:21] detectron2.evaluation.evaluator INFO: Inference done 248/748. Dataloading: 0.0015 s/iter. Inference: 0.0612 s/iter. Eval: 0.0009 s/iter. Total: 0.0636 s/iter. ETA=0:00:31
+[09/25 23:36:26] detectron2.evaluation.evaluator INFO: Inference done 328/748. Dataloading: 0.0015 s/iter. Inference: 0.0612 s/iter. Eval: 0.0007 s/iter. Total: 0.0635 s/iter. ETA=0:00:26
+[09/25 23:36:31] detectron2.evaluation.evaluator INFO: Inference done 408/748. Dataloading: 0.0015 s/iter. Inference: 0.0612 s/iter. Eval: 0.0006 s/iter. Total: 0.0634 s/iter. ETA=0:00:21
+[09/25 23:36:36] detectron2.evaluation.evaluator INFO: Inference done 486/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0009 s/iter. Total: 0.0636 s/iter. ETA=0:00:16
+[09/25 23:36:41] detectron2.evaluation.evaluator INFO: Inference done 566/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0008 s/iter. Total: 0.0635 s/iter. ETA=0:00:11
+[09/25 23:36:46] detectron2.evaluation.evaluator INFO: Inference done 646/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0008 s/iter. Total: 0.0634 s/iter. ETA=0:00:06
+[09/25 23:36:51] detectron2.evaluation.evaluator INFO: Inference done 726/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0007 s/iter. Total: 0.0634 s/iter. ETA=0:00:01
+[09/25 23:36:53] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.556743 (0.064006 s / iter per device, on 2 devices)
+[09/25 23:36:53] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.061095 s / iter per device, on 2 devices)
+[09/26 00:18:46] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 00:18:46] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 00:18:47] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 00:18:47] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 00:18:47] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 00:18:47] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 00:18:47] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 00:18:47] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 00:18:53] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0011 s/iter. Inference: 0.0600 s/iter. Eval: 0.0003 s/iter. Total: 0.0614 s/iter. ETA=0:00:45
+[09/26 00:18:58] detectron2.evaluation.evaluator INFO: Inference done 92/748. Dataloading: 0.0015 s/iter. Inference: 0.0606 s/iter. Eval: 0.0003 s/iter. Total: 0.0624 s/iter. ETA=0:00:40
+[09/26 00:19:03] detectron2.evaluation.evaluator INFO: Inference done 171/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0003 s/iter. Total: 0.0629 s/iter. ETA=0:00:36
+[09/26 00:19:08] detectron2.evaluation.evaluator INFO: Inference done 250/748. Dataloading: 0.0015 s/iter. Inference: 0.0612 s/iter. Eval: 0.0003 s/iter. Total: 0.0630 s/iter. ETA=0:00:31
+[09/26 00:19:13] detectron2.evaluation.evaluator INFO: Inference done 330/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0003 s/iter. Total: 0.0630 s/iter. ETA=0:00:26
+[09/26 00:19:18] detectron2.evaluation.evaluator INFO: Inference done 409/748. Dataloading: 0.0015 s/iter. Inference: 0.0609 s/iter. Eval: 0.0006 s/iter. Total: 0.0631 s/iter. ETA=0:00:21
+[09/26 00:19:23] detectron2.evaluation.evaluator INFO: Inference done 490/748. Dataloading: 0.0015 s/iter. Inference: 0.0608 s/iter. Eval: 0.0005 s/iter. Total: 0.0629 s/iter. ETA=0:00:16
+[09/26 00:19:28] detectron2.evaluation.evaluator INFO: Inference done 571/748. Dataloading: 0.0015 s/iter. Inference: 0.0608 s/iter. Eval: 0.0005 s/iter. Total: 0.0628 s/iter. ETA=0:00:11
+[09/26 00:19:33] detectron2.evaluation.evaluator INFO: Inference done 652/748. Dataloading: 0.0015 s/iter. Inference: 0.0607 s/iter. Eval: 0.0005 s/iter. Total: 0.0628 s/iter. ETA=0:00:06
+[09/26 00:19:38] detectron2.evaluation.evaluator INFO: Inference done 731/748. Dataloading: 0.0015 s/iter. Inference: 0.0608 s/iter. Eval: 0.0005 s/iter. Total: 0.0629 s/iter. ETA=0:00:01
+[09/26 00:19:40] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.198920 (0.063525 s / iter per device, on 2 devices)
+[09/26 00:19:40] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.060848 s / iter per device, on 2 devices)
+[09/26 01:01:34] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 01:01:34] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 01:01:34] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 01:01:34] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 01:01:34] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 01:01:34] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 01:01:34] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 01:01:34] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 01:01:41] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0008 s/iter. Inference: 0.0618 s/iter. Eval: 0.0003 s/iter. Total: 0.0629 s/iter. ETA=0:00:46
+[09/26 01:01:46] detectron2.evaluation.evaluator INFO: Inference done 90/748. Dataloading: 0.0016 s/iter. Inference: 0.0617 s/iter. Eval: 0.0003 s/iter. Total: 0.0637 s/iter. ETA=0:00:41
+[09/26 01:01:51] detectron2.evaluation.evaluator INFO: Inference done 171/748. Dataloading: 0.0016 s/iter. Inference: 0.0612 s/iter. Eval: 0.0003 s/iter. Total: 0.0631 s/iter. ETA=0:00:36
+[09/26 01:01:56] detectron2.evaluation.evaluator INFO: Inference done 251/748. Dataloading: 0.0016 s/iter. Inference: 0.0612 s/iter. Eval: 0.0003 s/iter. Total: 0.0631 s/iter. ETA=0:00:31
+[09/26 01:02:01] detectron2.evaluation.evaluator INFO: Inference done 330/748. Dataloading: 0.0016 s/iter. Inference: 0.0610 s/iter. Eval: 0.0006 s/iter. Total: 0.0633 s/iter. ETA=0:00:26
+[09/26 01:02:06] detectron2.evaluation.evaluator INFO: Inference done 411/748. Dataloading: 0.0016 s/iter. Inference: 0.0609 s/iter. Eval: 0.0006 s/iter. Total: 0.0631 s/iter. ETA=0:00:21
+[09/26 01:02:11] detectron2.evaluation.evaluator INFO: Inference done 491/748. Dataloading: 0.0016 s/iter. Inference: 0.0609 s/iter. Eval: 0.0005 s/iter. Total: 0.0630 s/iter. ETA=0:00:16
+[09/26 01:02:16] detectron2.evaluation.evaluator INFO: Inference done 571/748. Dataloading: 0.0016 s/iter. Inference: 0.0608 s/iter. Eval: 0.0005 s/iter. Total: 0.0629 s/iter. ETA=0:00:11
+[09/26 01:02:21] detectron2.evaluation.evaluator INFO: Inference done 649/748. Dataloading: 0.0016 s/iter. Inference: 0.0608 s/iter. Eval: 0.0007 s/iter. Total: 0.0631 s/iter. ETA=0:00:06
+[09/26 01:02:26] detectron2.evaluation.evaluator INFO: Inference done 730/748. Dataloading: 0.0016 s/iter. Inference: 0.0608 s/iter. Eval: 0.0006 s/iter. Total: 0.0630 s/iter. ETA=0:00:01
+[09/26 01:02:28] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.433003 (0.063840 s / iter per device, on 2 devices)
+[09/26 01:02:28] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.060775 s / iter per device, on 2 devices)
+[09/26 01:44:26] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 01:44:26] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 01:44:26] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 01:44:26] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 01:44:26] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 01:44:26] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 01:44:26] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 01:44:26] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 01:44:33] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0010 s/iter. Inference: 0.0610 s/iter. Eval: 0.0003 s/iter. Total: 0.0623 s/iter. ETA=0:00:45
+[09/26 01:44:38] detectron2.evaluation.evaluator INFO: Inference done 92/748. Dataloading: 0.0015 s/iter. Inference: 0.0606 s/iter. Eval: 0.0003 s/iter. Total: 0.0623 s/iter. ETA=0:00:40
+[09/26 01:44:43] detectron2.evaluation.evaluator INFO: Inference done 171/748. Dataloading: 0.0015 s/iter. Inference: 0.0605 s/iter. Eval: 0.0009 s/iter. Total: 0.0629 s/iter. ETA=0:00:36
+[09/26 01:44:48] detectron2.evaluation.evaluator INFO: Inference done 251/748. Dataloading: 0.0015 s/iter. Inference: 0.0605 s/iter. Eval: 0.0007 s/iter. Total: 0.0628 s/iter. ETA=0:00:31
+[09/26 01:44:53] detectron2.evaluation.evaluator INFO: Inference done 331/748. Dataloading: 0.0016 s/iter. Inference: 0.0606 s/iter. Eval: 0.0006 s/iter. Total: 0.0628 s/iter. ETA=0:00:26
+[09/26 01:44:58] detectron2.evaluation.evaluator INFO: Inference done 410/748. Dataloading: 0.0016 s/iter. Inference: 0.0606 s/iter. Eval: 0.0008 s/iter. Total: 0.0630 s/iter. ETA=0:00:21
+[09/26 01:45:03] detectron2.evaluation.evaluator INFO: Inference done 491/748. Dataloading: 0.0015 s/iter. Inference: 0.0605 s/iter. Eval: 0.0007 s/iter. Total: 0.0629 s/iter. ETA=0:00:16
+[09/26 01:45:08] detectron2.evaluation.evaluator INFO: Inference done 572/748. Dataloading: 0.0015 s/iter. Inference: 0.0605 s/iter. Eval: 0.0007 s/iter. Total: 0.0628 s/iter. ETA=0:00:11
+[09/26 01:45:13] detectron2.evaluation.evaluator INFO: Inference done 653/748. Dataloading: 0.0015 s/iter. Inference: 0.0605 s/iter. Eval: 0.0006 s/iter. Total: 0.0627 s/iter. ETA=0:00:05
+[09/26 01:45:18] detectron2.evaluation.evaluator INFO: Inference done 732/748. Dataloading: 0.0015 s/iter. Inference: 0.0607 s/iter. Eval: 0.0006 s/iter. Total: 0.0629 s/iter. ETA=0:00:01
+[09/26 01:45:20] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.246291 (0.063589 s / iter per device, on 2 devices)
+[09/26 01:45:20] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.060661 s / iter per device, on 2 devices)
+[09/26 02:27:19] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 02:27:19] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 02:27:19] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 02:27:19] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 02:27:19] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 02:27:19] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 02:27:19] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 02:27:19] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 02:27:26] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0008 s/iter. Inference: 0.0610 s/iter. Eval: 0.0005 s/iter. Total: 0.0623 s/iter. ETA=0:00:45
+[09/26 02:27:31] detectron2.evaluation.evaluator INFO: Inference done 90/748. Dataloading: 0.0015 s/iter. Inference: 0.0603 s/iter. Eval: 0.0014 s/iter. Total: 0.0633 s/iter. ETA=0:00:41
+[09/26 02:27:36] detectron2.evaluation.evaluator INFO: Inference done 171/748. Dataloading: 0.0015 s/iter. Inference: 0.0603 s/iter. Eval: 0.0009 s/iter. Total: 0.0627 s/iter. ETA=0:00:36
+[09/26 02:27:41] detectron2.evaluation.evaluator INFO: Inference done 252/748. Dataloading: 0.0015 s/iter. Inference: 0.0603 s/iter. Eval: 0.0007 s/iter. Total: 0.0625 s/iter. ETA=0:00:31
+[09/26 02:27:46] detectron2.evaluation.evaluator INFO: Inference done 331/748. Dataloading: 0.0015 s/iter. Inference: 0.0603 s/iter. Eval: 0.0009 s/iter. Total: 0.0627 s/iter. ETA=0:00:26
+[09/26 02:27:51] detectron2.evaluation.evaluator INFO: Inference done 412/748. Dataloading: 0.0015 s/iter. Inference: 0.0603 s/iter. Eval: 0.0008 s/iter. Total: 0.0627 s/iter. ETA=0:00:21
+[09/26 02:27:56] detectron2.evaluation.evaluator INFO: Inference done 493/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0007 s/iter. Total: 0.0626 s/iter. ETA=0:00:15
+[09/26 02:28:01] detectron2.evaluation.evaluator INFO: Inference done 574/748. Dataloading: 0.0015 s/iter. Inference: 0.0603 s/iter. Eval: 0.0006 s/iter. Total: 0.0625 s/iter. ETA=0:00:10
+[09/26 02:28:06] detectron2.evaluation.evaluator INFO: Inference done 653/748. Dataloading: 0.0017 s/iter. Inference: 0.0603 s/iter. Eval: 0.0006 s/iter. Total: 0.0627 s/iter. ETA=0:00:05
+[09/26 02:28:11] detectron2.evaluation.evaluator INFO: Inference done 734/748. Dataloading: 0.0017 s/iter. Inference: 0.0603 s/iter. Eval: 0.0006 s/iter. Total: 0.0626 s/iter. ETA=0:00:00
+[09/26 02:28:12] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.080084 (0.063365 s / iter per device, on 2 devices)
+[09/26 02:28:12] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:44 (0.060344 s / iter per device, on 2 devices)
+[09/26 03:10:09] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 03:10:09] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 03:10:09] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 03:10:09] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 03:10:09] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 03:10:09] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 03:10:09] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 03:10:09] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 03:10:16] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0009 s/iter. Inference: 0.0622 s/iter. Eval: 0.0003 s/iter. Total: 0.0633 s/iter. ETA=0:00:46
+[09/26 03:10:21] detectron2.evaluation.evaluator INFO: Inference done 92/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0003 s/iter. Total: 0.0623 s/iter. ETA=0:00:40
+[09/26 03:10:26] detectron2.evaluation.evaluator INFO: Inference done 172/748. Dataloading: 0.0015 s/iter. Inference: 0.0609 s/iter. Eval: 0.0003 s/iter. Total: 0.0627 s/iter. ETA=0:00:36
+[09/26 03:10:32] detectron2.evaluation.evaluator INFO: Inference done 254/748. Dataloading: 0.0015 s/iter. Inference: 0.0606 s/iter. Eval: 0.0003 s/iter. Total: 0.0624 s/iter. ETA=0:00:30
+[09/26 03:10:37] detectron2.evaluation.evaluator INFO: Inference done 333/748. Dataloading: 0.0015 s/iter. Inference: 0.0605 s/iter. Eval: 0.0006 s/iter. Total: 0.0627 s/iter. ETA=0:00:26
+[09/26 03:10:42] detectron2.evaluation.evaluator INFO: Inference done 414/748. Dataloading: 0.0015 s/iter. Inference: 0.0605 s/iter. Eval: 0.0006 s/iter. Total: 0.0626 s/iter. ETA=0:00:20
+[09/26 03:10:47] detectron2.evaluation.evaluator INFO: Inference done 495/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0005 s/iter. Total: 0.0625 s/iter. ETA=0:00:15
+[09/26 03:10:52] detectron2.evaluation.evaluator INFO: Inference done 576/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0005 s/iter. Total: 0.0624 s/iter. ETA=0:00:10
+[09/26 03:10:57] detectron2.evaluation.evaluator INFO: Inference done 654/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0007 s/iter. Total: 0.0626 s/iter. ETA=0:00:05
+[09/26 03:11:02] detectron2.evaluation.evaluator INFO: Inference done 735/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0006 s/iter. Total: 0.0626 s/iter. ETA=0:00:00
+[09/26 03:11:03] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:46.992933 (0.063248 s / iter per device, on 2 devices)
+[09/26 03:11:03] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:44 (0.060397 s / iter per device, on 2 devices)
+[09/26 03:53:00] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 03:53:00] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 03:53:00] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 03:53:00] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 03:53:00] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 03:53:00] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 03:53:00] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 03:53:01] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 03:53:07] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0007 s/iter. Inference: 0.0590 s/iter. Eval: 0.0005 s/iter. Total: 0.0602 s/iter. ETA=0:00:44
+[09/26 03:53:12] detectron2.evaluation.evaluator INFO: Inference done 93/748. Dataloading: 0.0014 s/iter. Inference: 0.0598 s/iter. Eval: 0.0003 s/iter. Total: 0.0615 s/iter. ETA=0:00:40
+[09/26 03:53:17] detectron2.evaluation.evaluator INFO: Inference done 174/748. Dataloading: 0.0014 s/iter. Inference: 0.0596 s/iter. Eval: 0.0009 s/iter. Total: 0.0619 s/iter. ETA=0:00:35
+[09/26 03:53:22] detectron2.evaluation.evaluator INFO: Inference done 256/748. Dataloading: 0.0014 s/iter. Inference: 0.0596 s/iter. Eval: 0.0007 s/iter. Total: 0.0617 s/iter. ETA=0:00:30
+[09/26 03:53:27] detectron2.evaluation.evaluator INFO: Inference done 338/748. Dataloading: 0.0014 s/iter. Inference: 0.0596 s/iter. Eval: 0.0006 s/iter. Total: 0.0616 s/iter. ETA=0:00:25
+[09/26 03:53:32] detectron2.evaluation.evaluator INFO: Inference done 418/748. Dataloading: 0.0014 s/iter. Inference: 0.0598 s/iter. Eval: 0.0005 s/iter. Total: 0.0618 s/iter. ETA=0:00:20
+[09/26 03:53:37] detectron2.evaluation.evaluator INFO: Inference done 500/748. Dataloading: 0.0014 s/iter. Inference: 0.0598 s/iter. Eval: 0.0005 s/iter. Total: 0.0617 s/iter. ETA=0:00:15
+[09/26 03:53:42] detectron2.evaluation.evaluator INFO: Inference done 582/748. Dataloading: 0.0014 s/iter. Inference: 0.0597 s/iter. Eval: 0.0005 s/iter. Total: 0.0616 s/iter. ETA=0:00:10
+[09/26 03:53:47] detectron2.evaluation.evaluator INFO: Inference done 664/748. Dataloading: 0.0014 s/iter. Inference: 0.0597 s/iter. Eval: 0.0004 s/iter. Total: 0.0616 s/iter. ETA=0:00:05
+[09/26 03:53:52] detectron2.evaluation.evaluator INFO: Inference done 743/748. Dataloading: 0.0014 s/iter. Inference: 0.0598 s/iter. Eval: 0.0006 s/iter. Total: 0.0618 s/iter. ETA=0:00:00
+[09/26 03:53:53] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:46.372956 (0.062413 s / iter per device, on 2 devices)
+[09/26 03:53:53] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:44 (0.059762 s / iter per device, on 2 devices)
+[09/26 04:35:51] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 04:35:51] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 04:35:51] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 04:35:51] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 04:35:51] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 04:35:51] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 04:35:51] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 04:35:51] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 04:35:58] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0009 s/iter. Inference: 0.0606 s/iter. Eval: 0.0006 s/iter. Total: 0.0621 s/iter. ETA=0:00:45
+[09/26 04:36:03] detectron2.evaluation.evaluator INFO: Inference done 90/748. Dataloading: 0.0015 s/iter. Inference: 0.0619 s/iter. Eval: 0.0003 s/iter. Total: 0.0638 s/iter. ETA=0:00:42
+[09/26 04:36:08] detectron2.evaluation.evaluator INFO: Inference done 170/748. Dataloading: 0.0016 s/iter. Inference: 0.0614 s/iter. Eval: 0.0003 s/iter. Total: 0.0633 s/iter. ETA=0:00:36
+[09/26 04:36:13] detectron2.evaluation.evaluator INFO: Inference done 251/748. Dataloading: 0.0016 s/iter. Inference: 0.0610 s/iter. Eval: 0.0003 s/iter. Total: 0.0629 s/iter. ETA=0:00:31
+[09/26 04:36:18] detectron2.evaluation.evaluator INFO: Inference done 330/748. Dataloading: 0.0015 s/iter. Inference: 0.0609 s/iter. Eval: 0.0006 s/iter. Total: 0.0631 s/iter. ETA=0:00:26
+[09/26 04:36:23] detectron2.evaluation.evaluator INFO: Inference done 411/748. Dataloading: 0.0015 s/iter. Inference: 0.0608 s/iter. Eval: 0.0006 s/iter. Total: 0.0630 s/iter. ETA=0:00:21
+[09/26 04:36:28] detectron2.evaluation.evaluator INFO: Inference done 492/748. Dataloading: 0.0015 s/iter. Inference: 0.0607 s/iter. Eval: 0.0005 s/iter. Total: 0.0628 s/iter. ETA=0:00:16
+[09/26 04:36:33] detectron2.evaluation.evaluator INFO: Inference done 571/748. Dataloading: 0.0015 s/iter. Inference: 0.0607 s/iter. Eval: 0.0007 s/iter. Total: 0.0630 s/iter. ETA=0:00:11
+[09/26 04:36:38] detectron2.evaluation.evaluator INFO: Inference done 651/748. Dataloading: 0.0015 s/iter. Inference: 0.0607 s/iter. Eval: 0.0007 s/iter. Total: 0.0629 s/iter. ETA=0:00:06
+[09/26 04:36:43] detectron2.evaluation.evaluator INFO: Inference done 732/748. Dataloading: 0.0015 s/iter. Inference: 0.0607 s/iter. Eval: 0.0006 s/iter. Total: 0.0629 s/iter. ETA=0:00:01
+[09/26 04:36:45] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.218093 (0.063551 s / iter per device, on 2 devices)
+[09/26 04:36:45] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.060659 s / iter per device, on 2 devices)
+[09/26 05:18:46] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 05:18:46] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 05:18:46] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 05:18:46] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 05:18:46] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 05:18:46] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 05:18:46] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 05:18:46] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 05:18:53] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0009 s/iter. Inference: 0.0603 s/iter. Eval: 0.0003 s/iter. Total: 0.0614 s/iter. ETA=0:00:45
+[09/26 05:18:58] detectron2.evaluation.evaluator INFO: Inference done 92/748. Dataloading: 0.0015 s/iter. Inference: 0.0603 s/iter. Eval: 0.0003 s/iter. Total: 0.0622 s/iter. ETA=0:00:40
+[09/26 05:19:03] detectron2.evaluation.evaluator INFO: Inference done 171/748. Dataloading: 0.0015 s/iter. Inference: 0.0605 s/iter. Eval: 0.0009 s/iter. Total: 0.0629 s/iter. ETA=0:00:36
+[09/26 05:19:08] detectron2.evaluation.evaluator INFO: Inference done 252/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0007 s/iter. Total: 0.0627 s/iter. ETA=0:00:31
+[09/26 05:19:13] detectron2.evaluation.evaluator INFO: Inference done 330/748. Dataloading: 0.0016 s/iter. Inference: 0.0609 s/iter. Eval: 0.0006 s/iter. Total: 0.0631 s/iter. ETA=0:00:26
+[09/26 05:19:18] detectron2.evaluation.evaluator INFO: Inference done 411/748. Dataloading: 0.0016 s/iter. Inference: 0.0608 s/iter. Eval: 0.0005 s/iter. Total: 0.0629 s/iter. ETA=0:00:21
+[09/26 05:19:23] detectron2.evaluation.evaluator INFO: Inference done 491/748. Dataloading: 0.0016 s/iter. Inference: 0.0608 s/iter. Eval: 0.0005 s/iter. Total: 0.0629 s/iter. ETA=0:00:16
+[09/26 05:19:28] detectron2.evaluation.evaluator INFO: Inference done 571/748. Dataloading: 0.0016 s/iter. Inference: 0.0608 s/iter. Eval: 0.0005 s/iter. Total: 0.0628 s/iter. ETA=0:00:11
+[09/26 05:19:33] detectron2.evaluation.evaluator INFO: Inference done 650/748. Dataloading: 0.0015 s/iter. Inference: 0.0609 s/iter. Eval: 0.0005 s/iter. Total: 0.0630 s/iter. ETA=0:00:06
+[09/26 05:19:38] detectron2.evaluation.evaluator INFO: Inference done 731/748. Dataloading: 0.0015 s/iter. Inference: 0.0609 s/iter. Eval: 0.0004 s/iter. Total: 0.0629 s/iter. ETA=0:00:01
+[09/26 05:19:40] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.210421 (0.063540 s / iter per device, on 2 devices)
+[09/26 05:19:40] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.060832 s / iter per device, on 2 devices)
+[09/26 06:01:42] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 06:01:42] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 06:01:42] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 06:01:42] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 06:01:42] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 06:01:42] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 06:01:42] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 06:01:42] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 06:01:48] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0010 s/iter. Inference: 0.0619 s/iter. Eval: 0.0003 s/iter. Total: 0.0632 s/iter. ETA=0:00:46
+[09/26 06:01:53] detectron2.evaluation.evaluator INFO: Inference done 90/748. Dataloading: 0.0015 s/iter. Inference: 0.0606 s/iter. Eval: 0.0013 s/iter. Total: 0.0634 s/iter. ETA=0:00:41
+[09/26 06:01:58] detectron2.evaluation.evaluator INFO: Inference done 170/748. Dataloading: 0.0015 s/iter. Inference: 0.0607 s/iter. Eval: 0.0008 s/iter. Total: 0.0631 s/iter. ETA=0:00:36
+[09/26 06:02:03] detectron2.evaluation.evaluator INFO: Inference done 251/748. Dataloading: 0.0016 s/iter. Inference: 0.0606 s/iter. Eval: 0.0007 s/iter. Total: 0.0629 s/iter. ETA=0:00:31
+[09/26 06:02:09] detectron2.evaluation.evaluator INFO: Inference done 330/748. Dataloading: 0.0016 s/iter. Inference: 0.0606 s/iter. Eval: 0.0009 s/iter. Total: 0.0631 s/iter. ETA=0:00:26
+[09/26 06:02:14] detectron2.evaluation.evaluator INFO: Inference done 410/748. Dataloading: 0.0016 s/iter. Inference: 0.0607 s/iter. Eval: 0.0008 s/iter. Total: 0.0630 s/iter. ETA=0:00:21
+[09/26 06:02:19] detectron2.evaluation.evaluator INFO: Inference done 491/748. Dataloading: 0.0016 s/iter. Inference: 0.0606 s/iter. Eval: 0.0007 s/iter. Total: 0.0629 s/iter. ETA=0:00:16
+[09/26 06:02:24] detectron2.evaluation.evaluator INFO: Inference done 569/748. Dataloading: 0.0016 s/iter. Inference: 0.0608 s/iter. Eval: 0.0007 s/iter. Total: 0.0631 s/iter. ETA=0:00:11
+[09/26 06:02:29] detectron2.evaluation.evaluator INFO: Inference done 649/748. Dataloading: 0.0016 s/iter. Inference: 0.0608 s/iter. Eval: 0.0006 s/iter. Total: 0.0631 s/iter. ETA=0:00:06
+[09/26 06:02:34] detectron2.evaluation.evaluator INFO: Inference done 729/748. Dataloading: 0.0016 s/iter. Inference: 0.0608 s/iter. Eval: 0.0006 s/iter. Total: 0.0630 s/iter. ETA=0:00:01
+[09/26 06:02:35] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.367041 (0.063751 s / iter per device, on 2 devices)
+[09/26 06:02:35] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.060832 s / iter per device, on 2 devices)
+[09/26 06:44:39] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 06:44:39] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 06:44:39] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 06:44:39] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 06:44:39] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 06:44:39] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 06:44:39] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 06:44:39] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 06:44:45] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0009 s/iter. Inference: 0.0608 s/iter. Eval: 0.0005 s/iter. Total: 0.0622 s/iter. ETA=0:00:45
+[09/26 06:44:50] detectron2.evaluation.evaluator INFO: Inference done 92/748. Dataloading: 0.0014 s/iter. Inference: 0.0601 s/iter. Eval: 0.0003 s/iter. Total: 0.0619 s/iter. ETA=0:00:40
+[09/26 06:44:55] detectron2.evaluation.evaluator INFO: Inference done 171/748. Dataloading: 0.0015 s/iter. Inference: 0.0603 s/iter. Eval: 0.0009 s/iter. Total: 0.0627 s/iter. ETA=0:00:36
+[09/26 06:45:00] detectron2.evaluation.evaluator INFO: Inference done 252/748. Dataloading: 0.0015 s/iter. Inference: 0.0603 s/iter. Eval: 0.0007 s/iter. Total: 0.0626 s/iter. ETA=0:00:31
+[09/26 06:45:06] detectron2.evaluation.evaluator INFO: Inference done 333/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0006 s/iter. Total: 0.0626 s/iter. ETA=0:00:25
+[09/26 06:45:11] detectron2.evaluation.evaluator INFO: Inference done 412/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0009 s/iter. Total: 0.0628 s/iter. ETA=0:00:21
+[09/26 06:45:16] detectron2.evaluation.evaluator INFO: Inference done 493/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0008 s/iter. Total: 0.0627 s/iter. ETA=0:00:15
+[09/26 06:45:21] detectron2.evaluation.evaluator INFO: Inference done 574/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0007 s/iter. Total: 0.0626 s/iter. ETA=0:00:10
+[09/26 06:45:26] detectron2.evaluation.evaluator INFO: Inference done 655/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0007 s/iter. Total: 0.0626 s/iter. ETA=0:00:05
+[09/26 06:45:31] detectron2.evaluation.evaluator INFO: Inference done 733/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0008 s/iter. Total: 0.0628 s/iter. ETA=0:00:00
+[09/26 06:45:32] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.170501 (0.063487 s / iter per device, on 2 devices)
+[09/26 06:45:32] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:44 (0.060441 s / iter per device, on 2 devices)
+[09/26 07:27:33] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 07:27:33] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 07:27:33] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 07:27:33] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 07:27:33] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 07:27:33] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 07:27:33] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 07:27:33] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 07:27:39] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0012 s/iter. Inference: 0.0604 s/iter. Eval: 0.0153 s/iter. Total: 0.0769 s/iter. ETA=0:00:56
+[09/26 07:27:44] detectron2.evaluation.evaluator INFO: Inference done 92/748. Dataloading: 0.0015 s/iter. Inference: 0.0606 s/iter. Eval: 0.0013 s/iter. Total: 0.0635 s/iter. ETA=0:00:41
+[09/26 07:27:49] detectron2.evaluation.evaluator INFO: Inference done 173/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0008 s/iter. Total: 0.0628 s/iter. ETA=0:00:36
+[09/26 07:27:54] detectron2.evaluation.evaluator INFO: Inference done 252/748. Dataloading: 0.0015 s/iter. Inference: 0.0609 s/iter. Eval: 0.0007 s/iter. Total: 0.0631 s/iter. ETA=0:00:31
+[09/26 07:27:59] detectron2.evaluation.evaluator INFO: Inference done 333/748. Dataloading: 0.0015 s/iter. Inference: 0.0608 s/iter. Eval: 0.0006 s/iter. Total: 0.0630 s/iter. ETA=0:00:26
+[09/26 07:28:04] detectron2.evaluation.evaluator INFO: Inference done 414/748. Dataloading: 0.0015 s/iter. Inference: 0.0607 s/iter. Eval: 0.0005 s/iter. Total: 0.0628 s/iter. ETA=0:00:20
+[09/26 07:28:09] detectron2.evaluation.evaluator INFO: Inference done 493/748. Dataloading: 0.0015 s/iter. Inference: 0.0610 s/iter. Eval: 0.0005 s/iter. Total: 0.0630 s/iter. ETA=0:00:16
+[09/26 07:28:14] detectron2.evaluation.evaluator INFO: Inference done 573/748. Dataloading: 0.0015 s/iter. Inference: 0.0609 s/iter. Eval: 0.0005 s/iter. Total: 0.0629 s/iter. ETA=0:00:11
+[09/26 07:28:19] detectron2.evaluation.evaluator INFO: Inference done 654/748. Dataloading: 0.0015 s/iter. Inference: 0.0608 s/iter. Eval: 0.0005 s/iter. Total: 0.0628 s/iter. ETA=0:00:05
+[09/26 07:28:24] detectron2.evaluation.evaluator INFO: Inference done 735/748. Dataloading: 0.0015 s/iter. Inference: 0.0608 s/iter. Eval: 0.0004 s/iter. Total: 0.0628 s/iter. ETA=0:00:00
+[09/26 07:28:26] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.289578 (0.063647 s / iter per device, on 2 devices)
+[09/26 07:28:26] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.061004 s / iter per device, on 2 devices)
+[09/26 08:10:29] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 08:10:29] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 08:10:29] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 08:10:29] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 08:10:29] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 08:10:29] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 08:10:29] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 08:10:29] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 08:10:35] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0011 s/iter. Inference: 0.0617 s/iter. Eval: 0.0004 s/iter. Total: 0.0632 s/iter. ETA=0:00:46
+[09/26 08:10:40] detectron2.evaluation.evaluator INFO: Inference done 91/748. Dataloading: 0.0015 s/iter. Inference: 0.0607 s/iter. Eval: 0.0003 s/iter. Total: 0.0626 s/iter. ETA=0:00:41
+[09/26 08:10:45] detectron2.evaluation.evaluator INFO: Inference done 170/748. Dataloading: 0.0015 s/iter. Inference: 0.0606 s/iter. Eval: 0.0009 s/iter. Total: 0.0631 s/iter. ETA=0:00:36
+[09/26 08:10:50] detectron2.evaluation.evaluator INFO: Inference done 250/748. Dataloading: 0.0016 s/iter. Inference: 0.0607 s/iter. Eval: 0.0007 s/iter. Total: 0.0629 s/iter. ETA=0:00:31
+[09/26 08:10:55] detectron2.evaluation.evaluator INFO: Inference done 330/748. Dataloading: 0.0016 s/iter. Inference: 0.0607 s/iter. Eval: 0.0006 s/iter. Total: 0.0629 s/iter. ETA=0:00:26
+[09/26 08:11:00] detectron2.evaluation.evaluator INFO: Inference done 409/748. Dataloading: 0.0016 s/iter. Inference: 0.0607 s/iter. Eval: 0.0008 s/iter. Total: 0.0631 s/iter. ETA=0:00:21
+[09/26 08:11:05] detectron2.evaluation.evaluator INFO: Inference done 490/748. Dataloading: 0.0016 s/iter. Inference: 0.0606 s/iter. Eval: 0.0007 s/iter. Total: 0.0629 s/iter. ETA=0:00:16
+[09/26 08:11:10] detectron2.evaluation.evaluator INFO: Inference done 570/748. Dataloading: 0.0016 s/iter. Inference: 0.0606 s/iter. Eval: 0.0007 s/iter. Total: 0.0629 s/iter. ETA=0:00:11
+[09/26 08:11:15] detectron2.evaluation.evaluator INFO: Inference done 647/748. Dataloading: 0.0016 s/iter. Inference: 0.0607 s/iter. Eval: 0.0009 s/iter. Total: 0.0631 s/iter. ETA=0:00:06
+[09/26 08:11:21] detectron2.evaluation.evaluator INFO: Inference done 727/748. Dataloading: 0.0016 s/iter. Inference: 0.0607 s/iter. Eval: 0.0008 s/iter. Total: 0.0631 s/iter. ETA=0:00:01
+[09/26 08:11:22] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.485203 (0.063910 s / iter per device, on 2 devices)
+[09/26 08:11:22] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.060750 s / iter per device, on 2 devices)
+[09/26 08:53:26] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 08:53:26] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 08:53:26] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 08:53:26] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 08:53:26] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 08:53:26] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 08:53:26] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 08:53:26] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 08:53:33] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0008 s/iter. Inference: 0.0602 s/iter. Eval: 0.0005 s/iter. Total: 0.0615 s/iter. ETA=0:00:45
+[09/26 08:53:38] detectron2.evaluation.evaluator INFO: Inference done 92/748. Dataloading: 0.0015 s/iter. Inference: 0.0604 s/iter. Eval: 0.0003 s/iter. Total: 0.0623 s/iter. ETA=0:00:40
+[09/26 08:53:43] detectron2.evaluation.evaluator INFO: Inference done 171/748. Dataloading: 0.0015 s/iter. Inference: 0.0609 s/iter. Eval: 0.0003 s/iter. Total: 0.0628 s/iter. ETA=0:00:36
+[09/26 08:53:48] detectron2.evaluation.evaluator INFO: Inference done 252/748. Dataloading: 0.0015 s/iter. Inference: 0.0607 s/iter. Eval: 0.0003 s/iter. Total: 0.0626 s/iter. ETA=0:00:31
+[09/26 08:53:53] detectron2.evaluation.evaluator INFO: Inference done 333/748. Dataloading: 0.0015 s/iter. Inference: 0.0606 s/iter. Eval: 0.0003 s/iter. Total: 0.0625 s/iter. ETA=0:00:25
+[09/26 08:53:58] detectron2.evaluation.evaluator INFO: Inference done 412/748. Dataloading: 0.0016 s/iter. Inference: 0.0605 s/iter. Eval: 0.0006 s/iter. Total: 0.0627 s/iter. ETA=0:00:21
+[09/26 08:54:03] detectron2.evaluation.evaluator INFO: Inference done 492/748. Dataloading: 0.0016 s/iter. Inference: 0.0605 s/iter. Eval: 0.0006 s/iter. Total: 0.0627 s/iter. ETA=0:00:16
+[09/26 08:54:08] detectron2.evaluation.evaluator INFO: Inference done 572/748. Dataloading: 0.0016 s/iter. Inference: 0.0606 s/iter. Eval: 0.0005 s/iter. Total: 0.0627 s/iter. ETA=0:00:11
+[09/26 08:54:13] detectron2.evaluation.evaluator INFO: Inference done 653/748. Dataloading: 0.0016 s/iter. Inference: 0.0606 s/iter. Eval: 0.0005 s/iter. Total: 0.0627 s/iter. ETA=0:00:05
+[09/26 08:54:18] detectron2.evaluation.evaluator INFO: Inference done 731/748. Dataloading: 0.0016 s/iter. Inference: 0.0606 s/iter. Eval: 0.0007 s/iter. Total: 0.0628 s/iter. ETA=0:00:01
+[09/26 08:54:20] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.306903 (0.063670 s / iter per device, on 2 devices)
+[09/26 08:54:20] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:44 (0.060549 s / iter per device, on 2 devices)
+[09/26 09:36:24] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 09:36:24] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 09:36:24] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 09:36:24] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 09:36:24] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 09:36:24] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 09:36:24] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 09:36:24] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 09:36:31] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0009 s/iter. Inference: 0.0632 s/iter. Eval: 0.0155 s/iter. Total: 0.0796 s/iter. ETA=0:00:58
+[09/26 09:36:36] detectron2.evaluation.evaluator INFO: Inference done 91/748. Dataloading: 0.0015 s/iter. Inference: 0.0610 s/iter. Eval: 0.0014 s/iter. Total: 0.0640 s/iter. ETA=0:00:42
+[09/26 09:36:42] detectron2.evaluation.evaluator INFO: Inference done 171/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0009 s/iter. Total: 0.0636 s/iter. ETA=0:00:36
+[09/26 09:36:47] detectron2.evaluation.evaluator INFO: Inference done 249/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0011 s/iter. Total: 0.0638 s/iter. ETA=0:00:31
+[09/26 09:36:52] detectron2.evaluation.evaluator INFO: Inference done 329/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0009 s/iter. Total: 0.0636 s/iter. ETA=0:00:26
+[09/26 09:36:57] detectron2.evaluation.evaluator INFO: Inference done 410/748. Dataloading: 0.0015 s/iter. Inference: 0.0610 s/iter. Eval: 0.0008 s/iter. Total: 0.0634 s/iter. ETA=0:00:21
+[09/26 09:37:02] detectron2.evaluation.evaluator INFO: Inference done 489/748. Dataloading: 0.0018 s/iter. Inference: 0.0609 s/iter. Eval: 0.0007 s/iter. Total: 0.0634 s/iter. ETA=0:00:16
+[09/26 09:37:07] detectron2.evaluation.evaluator INFO: Inference done 569/748. Dataloading: 0.0018 s/iter. Inference: 0.0609 s/iter. Eval: 0.0007 s/iter. Total: 0.0633 s/iter. ETA=0:00:11
+[09/26 09:37:12] detectron2.evaluation.evaluator INFO: Inference done 649/748. Dataloading: 0.0017 s/iter. Inference: 0.0609 s/iter. Eval: 0.0006 s/iter. Total: 0.0633 s/iter. ETA=0:00:06
+[09/26 09:37:17] detectron2.evaluation.evaluator INFO: Inference done 729/748. Dataloading: 0.0017 s/iter. Inference: 0.0609 s/iter. Eval: 0.0006 s/iter. Total: 0.0632 s/iter. ETA=0:00:01
+[09/26 09:37:19] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.679652 (0.064172 s / iter per device, on 2 devices)
+[09/26 09:37:19] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.061036 s / iter per device, on 2 devices)
+[09/26 10:19:25] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 10:19:25] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 10:19:25] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 10:19:25] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 10:19:25] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 10:19:25] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 10:19:25] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 10:19:25] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 10:19:32] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0011 s/iter. Inference: 0.0613 s/iter. Eval: 0.0006 s/iter. Total: 0.0631 s/iter. ETA=0:00:46
+[09/26 10:19:37] detectron2.evaluation.evaluator INFO: Inference done 90/748. Dataloading: 0.0014 s/iter. Inference: 0.0608 s/iter. Eval: 0.0014 s/iter. Total: 0.0637 s/iter. ETA=0:00:41
+[09/26 10:19:42] detectron2.evaluation.evaluator INFO: Inference done 171/748. Dataloading: 0.0015 s/iter. Inference: 0.0607 s/iter. Eval: 0.0009 s/iter. Total: 0.0631 s/iter. ETA=0:00:36
+[09/26 10:19:47] detectron2.evaluation.evaluator INFO: Inference done 251/748. Dataloading: 0.0015 s/iter. Inference: 0.0607 s/iter. Eval: 0.0007 s/iter. Total: 0.0629 s/iter. ETA=0:00:31
+[09/26 10:19:52] detectron2.evaluation.evaluator INFO: Inference done 330/748. Dataloading: 0.0015 s/iter. Inference: 0.0607 s/iter. Eval: 0.0009 s/iter. Total: 0.0632 s/iter. ETA=0:00:26
+[09/26 10:19:57] detectron2.evaluation.evaluator INFO: Inference done 411/748. Dataloading: 0.0015 s/iter. Inference: 0.0606 s/iter. Eval: 0.0008 s/iter. Total: 0.0629 s/iter. ETA=0:00:21
+[09/26 10:20:02] detectron2.evaluation.evaluator INFO: Inference done 491/748. Dataloading: 0.0015 s/iter. Inference: 0.0606 s/iter. Eval: 0.0007 s/iter. Total: 0.0629 s/iter. ETA=0:00:16
+[09/26 10:20:07] detectron2.evaluation.evaluator INFO: Inference done 569/748. Dataloading: 0.0015 s/iter. Inference: 0.0607 s/iter. Eval: 0.0009 s/iter. Total: 0.0631 s/iter. ETA=0:00:11
+[09/26 10:20:12] detectron2.evaluation.evaluator INFO: Inference done 649/748. Dataloading: 0.0015 s/iter. Inference: 0.0608 s/iter. Eval: 0.0008 s/iter. Total: 0.0631 s/iter. ETA=0:00:06
+[09/26 10:20:17] detectron2.evaluation.evaluator INFO: Inference done 729/748. Dataloading: 0.0015 s/iter. Inference: 0.0608 s/iter. Eval: 0.0008 s/iter. Total: 0.0631 s/iter. ETA=0:00:01
+[09/26 10:20:19] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.365677 (0.063749 s / iter per device, on 2 devices)
+[09/26 10:20:19] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.060774 s / iter per device, on 2 devices)
+[09/26 11:02:26] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 11:02:26] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 11:02:26] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 11:02:26] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 11:02:26] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 11:02:26] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 11:02:26] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 11:02:26] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 11:02:33] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0008 s/iter. Inference: 0.0599 s/iter. Eval: 0.0003 s/iter. Total: 0.0611 s/iter. ETA=0:00:44
+[09/26 11:02:38] detectron2.evaluation.evaluator INFO: Inference done 90/748. Dataloading: 0.0014 s/iter. Inference: 0.0606 s/iter. Eval: 0.0015 s/iter. Total: 0.0635 s/iter. ETA=0:00:41
+[09/26 11:02:44] detectron2.evaluation.evaluator INFO: Inference done 170/748. Dataloading: 0.0015 s/iter. Inference: 0.0608 s/iter. Eval: 0.0009 s/iter. Total: 0.0631 s/iter. ETA=0:00:36
+[09/26 11:02:49] detectron2.evaluation.evaluator INFO: Inference done 248/748. Dataloading: 0.0014 s/iter. Inference: 0.0609 s/iter. Eval: 0.0012 s/iter. Total: 0.0636 s/iter. ETA=0:00:31
+[09/26 11:02:54] detectron2.evaluation.evaluator INFO: Inference done 328/748. Dataloading: 0.0015 s/iter. Inference: 0.0609 s/iter. Eval: 0.0010 s/iter. Total: 0.0634 s/iter. ETA=0:00:26
+[09/26 11:02:59] detectron2.evaluation.evaluator INFO: Inference done 407/748. Dataloading: 0.0015 s/iter. Inference: 0.0612 s/iter. Eval: 0.0008 s/iter. Total: 0.0635 s/iter. ETA=0:00:21
+[09/26 11:03:04] detectron2.evaluation.evaluator INFO: Inference done 487/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0007 s/iter. Total: 0.0633 s/iter. ETA=0:00:16
+[09/26 11:03:09] detectron2.evaluation.evaluator INFO: Inference done 567/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0007 s/iter. Total: 0.0633 s/iter. ETA=0:00:11
+[09/26 11:03:14] detectron2.evaluation.evaluator INFO: Inference done 647/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0006 s/iter. Total: 0.0632 s/iter. ETA=0:00:06
+[09/26 11:03:19] detectron2.evaluation.evaluator INFO: Inference done 725/748. Dataloading: 0.0015 s/iter. Inference: 0.0610 s/iter. Eval: 0.0008 s/iter. Total: 0.0633 s/iter. ETA=0:00:01
+[09/26 11:03:21] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.665284 (0.064152 s / iter per device, on 2 devices)
+[09/26 11:03:21] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.061025 s / iter per device, on 2 devices)
+[09/26 11:45:30] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 11:45:30] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 11:45:30] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 11:45:30] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 11:45:30] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 11:45:30] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 11:45:30] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 11:45:30] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 11:45:37] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0008 s/iter. Inference: 0.0754 s/iter. Eval: 0.0006 s/iter. Total: 0.0767 s/iter. ETA=0:00:56
+[09/26 11:45:42] detectron2.evaluation.evaluator INFO: Inference done 92/748. Dataloading: 0.0014 s/iter. Inference: 0.0613 s/iter. Eval: 0.0003 s/iter. Total: 0.0631 s/iter. ETA=0:00:41
+[09/26 11:45:47] detectron2.evaluation.evaluator INFO: Inference done 173/748. Dataloading: 0.0014 s/iter. Inference: 0.0608 s/iter. Eval: 0.0003 s/iter. Total: 0.0626 s/iter. ETA=0:00:36
+[09/26 11:45:52] detectron2.evaluation.evaluator INFO: Inference done 253/748. Dataloading: 0.0015 s/iter. Inference: 0.0606 s/iter. Eval: 0.0007 s/iter. Total: 0.0628 s/iter. ETA=0:00:31
+[09/26 11:45:57] detectron2.evaluation.evaluator INFO: Inference done 334/748. Dataloading: 0.0014 s/iter. Inference: 0.0606 s/iter. Eval: 0.0006 s/iter. Total: 0.0627 s/iter. ETA=0:00:25
+[09/26 11:46:02] detectron2.evaluation.evaluator INFO: Inference done 413/748. Dataloading: 0.0014 s/iter. Inference: 0.0606 s/iter. Eval: 0.0008 s/iter. Total: 0.0629 s/iter. ETA=0:00:21
+[09/26 11:46:07] detectron2.evaluation.evaluator INFO: Inference done 494/748. Dataloading: 0.0014 s/iter. Inference: 0.0605 s/iter. Eval: 0.0008 s/iter. Total: 0.0628 s/iter. ETA=0:00:15
+[09/26 11:46:12] detectron2.evaluation.evaluator INFO: Inference done 575/748. Dataloading: 0.0014 s/iter. Inference: 0.0605 s/iter. Eval: 0.0007 s/iter. Total: 0.0626 s/iter. ETA=0:00:10
+[09/26 11:46:17] detectron2.evaluation.evaluator INFO: Inference done 656/748. Dataloading: 0.0014 s/iter. Inference: 0.0604 s/iter. Eval: 0.0006 s/iter. Total: 0.0626 s/iter. ETA=0:00:05
+[09/26 11:46:22] detectron2.evaluation.evaluator INFO: Inference done 734/748. Dataloading: 0.0014 s/iter. Inference: 0.0605 s/iter. Eval: 0.0008 s/iter. Total: 0.0627 s/iter. ETA=0:00:00
+[09/26 11:46:24] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.104599 (0.063398 s / iter per device, on 2 devices)
+[09/26 11:46:24] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:44 (0.060484 s / iter per device, on 2 devices)
+[09/26 12:28:32] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 12:28:32] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 12:28:32] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 12:28:32] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 12:28:32] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 12:28:32] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 12:28:32] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 12:28:32] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 12:28:38] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0010 s/iter. Inference: 0.0613 s/iter. Eval: 0.0005 s/iter. Total: 0.0628 s/iter. ETA=0:00:46
+[09/26 12:28:43] detectron2.evaluation.evaluator INFO: Inference done 91/748. Dataloading: 0.0014 s/iter. Inference: 0.0598 s/iter. Eval: 0.0013 s/iter. Total: 0.0626 s/iter. ETA=0:00:41
+[09/26 12:28:48] detectron2.evaluation.evaluator INFO: Inference done 173/748. Dataloading: 0.0014 s/iter. Inference: 0.0599 s/iter. Eval: 0.0008 s/iter. Total: 0.0621 s/iter. ETA=0:00:35
+[09/26 12:28:53] detectron2.evaluation.evaluator INFO: Inference done 253/748. Dataloading: 0.0014 s/iter. Inference: 0.0598 s/iter. Eval: 0.0010 s/iter. Total: 0.0623 s/iter. ETA=0:00:30
+[09/26 12:28:58] detectron2.evaluation.evaluator INFO: Inference done 335/748. Dataloading: 0.0014 s/iter. Inference: 0.0598 s/iter. Eval: 0.0009 s/iter. Total: 0.0621 s/iter. ETA=0:00:25
+[09/26 12:29:03] detectron2.evaluation.evaluator INFO: Inference done 416/748. Dataloading: 0.0014 s/iter. Inference: 0.0599 s/iter. Eval: 0.0008 s/iter. Total: 0.0621 s/iter. ETA=0:00:20
+[09/26 12:29:08] detectron2.evaluation.evaluator INFO: Inference done 496/748. Dataloading: 0.0014 s/iter. Inference: 0.0599 s/iter. Eval: 0.0009 s/iter. Total: 0.0623 s/iter. ETA=0:00:15
+[09/26 12:29:13] detectron2.evaluation.evaluator INFO: Inference done 577/748. Dataloading: 0.0014 s/iter. Inference: 0.0600 s/iter. Eval: 0.0008 s/iter. Total: 0.0622 s/iter. ETA=0:00:10
+[09/26 12:29:18] detectron2.evaluation.evaluator INFO: Inference done 659/748. Dataloading: 0.0014 s/iter. Inference: 0.0599 s/iter. Eval: 0.0008 s/iter. Total: 0.0621 s/iter. ETA=0:00:05
+[09/26 12:29:23] detectron2.evaluation.evaluator INFO: Inference done 739/748. Dataloading: 0.0014 s/iter. Inference: 0.0599 s/iter. Eval: 0.0009 s/iter. Total: 0.0622 s/iter. ETA=0:00:00
+[09/26 12:29:24] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:46.711301 (0.062869 s / iter per device, on 2 devices)
+[09/26 12:29:24] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:44 (0.059924 s / iter per device, on 2 devices)
+[09/26 13:11:30] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 13:11:30] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 13:11:30] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 13:11:30] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 13:11:30] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 13:11:30] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 13:11:30] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 13:11:30] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 13:11:36] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0005 s/iter. Inference: 0.0593 s/iter. Eval: 0.0007 s/iter. Total: 0.0605 s/iter. ETA=0:00:44
+[09/26 13:11:41] detectron2.evaluation.evaluator INFO: Inference done 93/748. Dataloading: 0.0013 s/iter. Inference: 0.0600 s/iter. Eval: 0.0003 s/iter. Total: 0.0616 s/iter. ETA=0:00:40
+[09/26 13:11:46] detectron2.evaluation.evaluator INFO: Inference done 173/748. Dataloading: 0.0013 s/iter. Inference: 0.0605 s/iter. Eval: 0.0003 s/iter. Total: 0.0621 s/iter. ETA=0:00:35
+[09/26 13:11:51] detectron2.evaluation.evaluator INFO: Inference done 254/748. Dataloading: 0.0013 s/iter. Inference: 0.0604 s/iter. Eval: 0.0003 s/iter. Total: 0.0620 s/iter. ETA=0:00:30
+[09/26 13:11:56] detectron2.evaluation.evaluator INFO: Inference done 335/748. Dataloading: 0.0013 s/iter. Inference: 0.0605 s/iter. Eval: 0.0003 s/iter. Total: 0.0621 s/iter. ETA=0:00:25
+[09/26 13:12:01] detectron2.evaluation.evaluator INFO: Inference done 414/748. Dataloading: 0.0013 s/iter. Inference: 0.0605 s/iter. Eval: 0.0006 s/iter. Total: 0.0624 s/iter. ETA=0:00:20
+[09/26 13:12:06] detectron2.evaluation.evaluator INFO: Inference done 495/748. Dataloading: 0.0013 s/iter. Inference: 0.0605 s/iter. Eval: 0.0005 s/iter. Total: 0.0623 s/iter. ETA=0:00:15
+[09/26 13:12:11] detectron2.evaluation.evaluator INFO: Inference done 576/748. Dataloading: 0.0014 s/iter. Inference: 0.0604 s/iter. Eval: 0.0005 s/iter. Total: 0.0623 s/iter. ETA=0:00:10
+[09/26 13:12:16] detectron2.evaluation.evaluator INFO: Inference done 655/748. Dataloading: 0.0014 s/iter. Inference: 0.0604 s/iter. Eval: 0.0007 s/iter. Total: 0.0625 s/iter. ETA=0:00:05
+[09/26 13:12:21] detectron2.evaluation.evaluator INFO: Inference done 736/748. Dataloading: 0.0014 s/iter. Inference: 0.0604 s/iter. Eval: 0.0006 s/iter. Total: 0.0624 s/iter. ETA=0:00:00
+[09/26 13:12:22] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:46.855369 (0.063062 s / iter per device, on 2 devices)
+[09/26 13:12:22] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:44 (0.060394 s / iter per device, on 2 devices)
+[09/26 13:30:52] detectron2.engine.hooks INFO: Overall training speed: 23436 iterations in 16:15:03 (2.4963 s / it)
+[09/26 13:30:52] detectron2.engine.hooks INFO: Total training time: 16:45:36 (0:30:33 on hooks)
+[09/26 13:30:53] detectron2.data.datasets.coco WARNING: 
+Category ids in annotations are not in [1, #categories]! We'll apply a mapping for you.
+
+[09/26 13:30:53] detectron2.data.datasets.coco INFO: Loaded 1497 images in COCO format from /cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/difdet/datasets/kitti_coco/annotations/train2017_no_misc_val_fixed_dimensions.json
+[09/26 13:30:53] detectron2.data.dataset_mapper INFO: [DatasetMapper] Augmentations used in inference: [ResizeShortestEdge(short_edge_length=(640, 640), max_size=640, sample_style='choice')]
+[09/26 13:30:53] detectron2.data.common INFO: Serializing the dataset using: <class 'detectron2.data.common._TorchSerializedList'>
+[09/26 13:30:53] detectron2.data.common INFO: Serializing 1497 elements to byte tensors and concatenating them all ...
+[09/26 13:30:53] detectron2.data.common INFO: Serialized dataset takes 0.91 MiB
+[09/26 13:30:53] detectron2.evaluation.coco_evaluation WARNING: COCO Evaluator instantiated using config, this is deprecated behavior. Please pass in explicit arguments instead.
+[09/26 13:30:53] detectron2.evaluation.evaluator INFO: Start inference on 748 batches
+[09/26 13:30:59] detectron2.evaluation.evaluator INFO: Inference done 11/748. Dataloading: 0.0010 s/iter. Inference: 0.0628 s/iter. Eval: 0.0003 s/iter. Total: 0.0641 s/iter. ETA=0:00:47
+[09/26 13:31:04] detectron2.evaluation.evaluator INFO: Inference done 90/748. Dataloading: 0.0015 s/iter. Inference: 0.0618 s/iter. Eval: 0.0003 s/iter. Total: 0.0636 s/iter. ETA=0:00:41
+[09/26 13:31:09] detectron2.evaluation.evaluator INFO: Inference done 169/748. Dataloading: 0.0015 s/iter. Inference: 0.0614 s/iter. Eval: 0.0009 s/iter. Total: 0.0638 s/iter. ETA=0:00:36
+[09/26 13:31:15] detectron2.evaluation.evaluator INFO: Inference done 249/748. Dataloading: 0.0015 s/iter. Inference: 0.0612 s/iter. Eval: 0.0007 s/iter. Total: 0.0635 s/iter. ETA=0:00:31
+[09/26 13:31:20] detectron2.evaluation.evaluator INFO: Inference done 329/748. Dataloading: 0.0015 s/iter. Inference: 0.0611 s/iter. Eval: 0.0006 s/iter. Total: 0.0632 s/iter. ETA=0:00:26
+[09/26 13:31:25] detectron2.evaluation.evaluator INFO: Inference done 407/748. Dataloading: 0.0015 s/iter. Inference: 0.0613 s/iter. Eval: 0.0005 s/iter. Total: 0.0635 s/iter. ETA=0:00:21
+[09/26 13:31:30] detectron2.evaluation.evaluator INFO: Inference done 487/748. Dataloading: 0.0015 s/iter. Inference: 0.0613 s/iter. Eval: 0.0005 s/iter. Total: 0.0634 s/iter. ETA=0:00:16
+[09/26 13:31:35] detectron2.evaluation.evaluator INFO: Inference done 567/748. Dataloading: 0.0016 s/iter. Inference: 0.0613 s/iter. Eval: 0.0005 s/iter. Total: 0.0633 s/iter. ETA=0:00:11
+[09/26 13:31:40] detectron2.evaluation.evaluator INFO: Inference done 645/748. Dataloading: 0.0016 s/iter. Inference: 0.0612 s/iter. Eval: 0.0007 s/iter. Total: 0.0635 s/iter. ETA=0:00:06
+[09/26 13:31:45] detectron2.evaluation.evaluator INFO: Inference done 725/748. Dataloading: 0.0016 s/iter. Inference: 0.0612 s/iter. Eval: 0.0006 s/iter. Total: 0.0634 s/iter. ETA=0:00:01
+[09/26 13:31:47] detectron2.evaluation.evaluator INFO: Total inference time: 0:00:47.594897 (0.064058 s / iter per device, on 2 devices)
+[09/26 13:31:47] detectron2.evaluation.evaluator INFO: Total inference pure compute time: 0:00:45 (0.061150 s / iter per device, on 2 devices)
