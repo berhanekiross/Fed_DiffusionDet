@@ -45,7 +45,7 @@ __pycache__/
 # Dataset annotations
 **/annotations/*.json
 
-# Large result files
+# Large result files (over 50MB)
 **/metrics1.json
 **/coco_instances_results.json
 
