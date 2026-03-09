@@ -49,11 +49,6 @@ __pycache__/
 **/metrics1.json
 **/coco_instances_results.json
 
-# Image files
-*.png
-*.jpg
-*.jpeg
-
 # IDE
 .vscode/
 .idea/
