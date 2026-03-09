@@ -1,0 +1,189 @@
+# DiffusionDet Model Configuration for KITTI Dataset (FL-compatible)
+# Detectron2 compatible 
+# DiffusionDet Model Configuration for KITTI Dataset (FL-compatible)
+
+# Minimal DiffusionDet config for FL
+# MODEL:
+#   META_ARCHITECTURE: "DiffusionDet"
+#   WEIGHTS: ""  # Don't load weights here - FL will handle it
+#   PIXEL_MEAN: [123.675, 116.280, 103.530]
+#   PIXEL_STD: [58.395, 57.120, 57.375]
+  
+#   BACKBONE:
+#     NAME: "build_resnet_fpn_backbone"
+  
+#   RESNETS:
+#     DEPTH: 50
+#     OUT_FEATURES: ["res2", "res3", "res4", "res5"]
+    
+#   FPN:
+#     IN_FEATURES: ["res2", "res3", "res4", "res5"]
+    
+#   DiffusionDet:
+#     NUM_CLASSES: 7  # KITTI classes
+#     NUM_PROPOSALS: 300
+    
+#     # Simplified settings
+#     SAMPLE_STEP: 1
+    
+#     # Architecture settings
+#     HIDDEN_DIM: 256
+#     NUM_HEADS: 8
+#     DIM_FEEDFORWARD: 2048
+#     # DEC_LAYERS: 6
+#     PRE_NORM: False
+    
+#     # Training settings
+#     DEEP_SUPERVISION: True
+#     USE_FOCAL: True
+#     USE_FED_LOSS: False
+#     PRIOR_PROB: 0.01
+    
+#     # Loss weights
+#     CLASS_WEIGHT: 2.0
+#     GIOU_WEIGHT: 2.0
+#     L1_WEIGHT: 5.0
+#     NO_OBJECT_WEIGHT: 0.1
+    
+#     # Diffusion settings
+#     SNR_SCALE: 2.0
+#     SAMPLE_STEP: 1
+
+# DATASETS:
+#   TRAIN: ("fl_kitti_train_Car",)  # Will be overridden per client
+#   TEST: ("fl_kitti_val_Car",)      # Will be overridden per client
+
+# SOLVER:
+#   IMS_PER_BATCH: 2  # Small batch for FL
+#   BASE_LR: 0.00001  # Lower LR for fine-tuning
+#   STEPS: (8000, 11000)
+#   MAX_ITER: 10  # Will be controlled by FL rounds
+#   CHECKPOINT_PERIOD: 999999  # Disable checkpointing
+  
+#   # Disable warmup for simplicity
+#   WARMUP_FACTOR: 1.0
+#   WARMUP_ITERS: 0
+#   WARMUP_METHOD: "linear"
+  
+#   # Simple SGD optimizer
+#   MOMENTUM: 0.9
+#   WEIGHT_DECAY: 0.0001
+
+# INPUT:
+#   MIN_SIZE_TRAIN: (800,)
+#   MAX_SIZE_TRAIN: 1333
+#   MIN_SIZE_TEST: 800
+#   MAX_SIZE_TEST: 1333
+#   FORMAT: "RGB"
+
+# OUTPUT_DIR: "./output/fl_minimal"
+
+# # Disable EMA for simplicity
+# MODEL_EMA:
+#   ENABLED: false
+
+# DATALOADER:
+#   NUM_WORKERS: 2
+#   FILTER_EMPTY_ANNOTATIONS: True
+
+
+
+
+
+VERSION: 2
+MODEL:
+  META_ARCHITECTURE: "DiffusionDet"
+  # WEIGHTS: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+  # WEIGHTS: "diffdet_coco_res50.pth"
+  # WEIGHTS: ""  # Empty - start from scratch to test if it's a checkpoint issue
+  DEVICE: "cuda"
+  
+  BACKBONE:
+    NAME: "build_resnet_fpn_backbone"
+  
+  RESNETS:
+    DEPTH: 50
+    STRIDE_IN_1X1: False
+    OUT_FEATURES: ["res2", "res3", "res4", "res5"]
+    NORM: "FrozenBN"
+    
+  FPN:
+    IN_FEATURES: ["res2", "res3", "res4", "res5"]
+    OUT_CHANNELS: 256
+    NORM: ""
+    FUSE_TYPE: "sum"
+  
+  ROI_HEADS:
+    NAME: "DiffusionDetROIHead"
+    IN_FEATURES: ["p2", "p3", "p4", "p5"]
+    NUM_CLASSES: 7
+    
+  DiffusionDet:
+    NUM_PROPOSALS: 800              #  cl value
+    NUM_CLASSES: 7                  # cl value
+    SAMPLE_STEP: 1                  # cl value
+
+# FL-specific dataset settings (will be overridden by client)
+DATASETS:
+  TRAIN: []  
+  TEST: []     
+
+DATASETS:
+  TRAIN: ("fl_kitti_train_Car",)  # Will be overridden per client
+  TEST: ("fl_kitti_val_Car",)      # Will be overridden per client
+
+
+DATALOADER:
+  NUM_WORKERS: 2
+  SAMPLER_TRAIN: "TrainingSampler"
+
+# # FL-adapted solver settings
+SOLVER:
+  IMS_PER_BATCH: 1                  
+  BASE_LR: 0.000025        #not used in case of FL lr scheduling          
+  STEPS: []                         
+  MAX_ITER: 200                
+  GAMMA: 0.9999                    #not used in case of FL lr scheduling     
+  WEIGHT_DECAY: 0.0001             # Keep regularization
+  WEIGHT_DECAY_NORM: 0.0
+  WARMUP_FACTOR: 0.1
+  WARMUP_ITERS: 0                   # No warmup in short FL rounds
+  OPTIMIZER: "ADAMW"                # ADAMW works well for FL
+  WARMUP_METHOD: "linear"
+  CHECKPOINT_PERIOD: 1000000         # Disable (FL handles checkpointing differently)
+  CLIP_GRADIENTS:
+    ENABLED: True
+    CLIP_TYPE: "value"
+    CLIP_VALUE: 0.1                 
+
+
+# input settings
+INPUT:
+  MIN_SIZE_TRAIN: [640, 672, 704, 736, 768]
+  MAX_SIZE_TRAIN: 1200              
+  MIN_SIZE_TEST: 800                
+  MAX_SIZE_TEST: 1200               
+  FORMAT: "BGR"
+  
+  CROP:
+    ENABLED: True
+    TYPE: "relative_range"
+    SIZE: [0.9, 0.9]
+
+TEST:
+  EVAL_PERIOD: 10                    
+  EXPECTED_RESULTS: []
+  DETECTIONS_PER_IMAGE: 100         
+
+# FL output directory
+OUTPUT_DIR: "./output_fedavg_new/fl_diffdet"
+SEED: 42
+
+CUDNN_BENCHMARK: True               
+
+# Model EMA for better performance
+MODEL_EMA:
+  ENABLED: True
+  DECAY: 0.999
+  DEVICE: "cuda"
+  # USE_EMA_WEIGHTS_FOR_EVAL: True

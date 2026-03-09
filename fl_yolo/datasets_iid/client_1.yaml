@@ -1,0 +1,13 @@
+names:
+  0: Car
+  1: Van
+  2: Truck
+  3: Pedestrian
+  4: Person_sitting
+  5: Cyclist
+  6: Tram
+train: /mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/fl_yolo/fl_dataset/partitions_iid/train_client_1.txt
+val: /mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/fl_yolo/fl_dataset/partitions_iid/val_client_1.txt
+path: /mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training
+nc: 7
+task: detect

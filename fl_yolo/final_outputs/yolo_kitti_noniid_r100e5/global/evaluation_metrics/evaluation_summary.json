@@ -1,0 +1,13 @@
+{
+  "total_models": 101,
+  "successful_evaluations": 101,
+  "best_mAP50": {
+    "value": 0.9123907644084228,
+    "model": "round_31"
+  },
+  "best_mAP50_95": {
+    "value": 0.6566117260688219,
+    "model": "round_31"
+  },
+  "final_round_mAP50": 0.8842451661689104
+}

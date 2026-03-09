@@ -1,0 +1,74 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fl_yolo"
+version = "1.0.0"
+description = ""
+license = "Apache-2.0"
+dependencies = [
+    "flwr[simulation]>=1.19.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[tool.flwr.app]
+publisher = "bre"
+
+[tool.flwr.app.components]
+serverapp = "fl_yolo.server_app:app"
+clientapp = "fl_yolo.client_app:app"
+
+[tool.flwr.app.config]
+num-server-rounds = 100
+fraction-fit = 1
+local-epochs = 2
+fraction-evaluate = 0.75
+# min-available-clients = 6
+
+
+# Evaluation Configuration
+perform_eval = true
+workers = 4
+eval_frequency = 5
+enable_global_eval = true
+global_eval_frequency = 10
+
+
+[tool.flwr.federations]
+default = "local-simulation"
+
+[tool.flwr.federations.local-simulation]
+options.num-supernodes = 1
+
+[tool.flwr.federations.local-simulation-gpu]
+options.num-supernodes = 6
+options.backend.client-resources.num-cpus = 2 
+options.backend.client-resources.num-gpus = 0.15
+
+# Strategy Configuration : Options: fedavg, fedprox, fednova, size_sqrt, size_log, size_cbrt  
+strategy = "fedavg"  
+mu = 0.01 
+adjustment = "sqrt"  
+
+# Model & Training Configuration
+save_every = 100
+output_base = "./output_yolo_temp"
+
+# Learning Rate Schedule: Options: cosine, exponential, linear 
+lr_schedule = "cosine"  
+initial_lr = 0.01
+final_lr = 0.001
+lr_decay_start = 2
+num_rounds = 3
+
+# YOLO-specific Configuration
+model_type = "yolo"
+yolo_model = "yolov8n.pt"
+img_size = 640
+batch_size = 16
+
+# KITTI Client Classes
+kitti-classes = "Car,Van,Truck,Pedestrian,Tram_Sitting,Cyclist"
