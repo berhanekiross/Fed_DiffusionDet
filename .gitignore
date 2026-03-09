@@ -10,7 +10,7 @@ venv/
 env/
 
 # Other code directories (push separately)
-breyolo/
+fl_yolo/
 fl_app/
 
 # Python cache
@@ -66,3 +66,9 @@ __pycache__/
 !centralized/**/*.sh
 !README.md
 !requirements.txt
+
+# FL YOLO specific exclusions
+fl_yolo/client_datasets/
+fl_yolo/datasets_iid/
+fl_yolo/datasets/
+fl_yolo/temp/
