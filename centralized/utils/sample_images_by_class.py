@@ -5,8 +5,8 @@ from pathlib import Path
 
 # Classes of interest
 classes = ['Car', 'Van', 'Truck', 'Pedestrian', 'Person_sitting', 'Cyclist', 'Tram']
-labels_dir = "/mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/training/labels/val"
-images_dir = "/mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/training/images/val"
+labels_dir = "/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training/labels/val"
+images_dir = "/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training/images/val"
 output_dir = "samples_per_class"
 os.makedirs(output_dir, exist_ok=True)
 

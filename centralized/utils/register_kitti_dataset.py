@@ -13,7 +13,7 @@ def register_kitti_dataset():
     """
     
     # Define your dataset paths
-    DATASET_ROOT = "/cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/centralized/datasets/kitti_coco/"
+    DATASET_ROOT = "/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/centralized/datasets/kitti_coco/"
     
     # Register training dataset
     register_coco_instances(
@@ -112,7 +112,7 @@ def create_train_val_split(split_ratio=0.8):
     import random
     
     # Load the original annotation file
-    annotation_file = "/cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/centralized/datasets/kitti_coco/annotations/train2017_no_misc.json"
+    annotation_file = "/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/centralized/datasets/kitti_coco/annotations/train2017_no_misc.json"
     
     with open(annotation_file, 'r') as f:
         data = json.load(f)

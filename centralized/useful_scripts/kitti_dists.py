@@ -1066,7 +1066,7 @@ def main():
     """Main function with argument parsing"""
     parser = argparse.ArgumentParser(description='KITTI Dataset Distribution Analyzer')
     parser.add_argument('--dataset-root', type=str, 
-                       default='/cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/centralized/datasets/kitti_coco',
+                       default='/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/centralized/datasets/kitti_coco',
                        help='Root directory of KITTI COCO dataset')
     parser.add_argument('--output-dir', type=str, default='./kitti_analysis',
                        help='Output directory for analysis results')

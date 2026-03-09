@@ -1,9 +1,9 @@
 # zod_yolo.yaml
 
-path: /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/zod_processed
+path: /mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/zod_processed
 
-# train: /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/centralized/test_absolute_train.txt
-# val: /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/centralized/test_absolute_val.txt
+# train: /mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/centralized/test_absolute_train.txt
+# val: /mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/centralized/test_absolute_val.txt
 
 # train: annotations/centralized/train_yolo.txt  # RELATIVE path
 # val: annotations/centralized/val_yolo.txt      # RELATIVE path

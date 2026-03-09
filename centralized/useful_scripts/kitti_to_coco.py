@@ -4,8 +4,8 @@ import cv2
 from tqdm import tqdm
 
 # === CONFIG ===
-KITTI_LABEL_DIR = '/mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/training/label_2'
-KITTI_IMAGE_DIR = '/mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/training/image_2'
+KITTI_LABEL_DIR = '/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training/label_2'
+KITTI_IMAGE_DIR = '/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training/image_2'
 
 OUTPUT_JSON = 'datasets/kitti_coco/annotations/instances_train2017.json'
 

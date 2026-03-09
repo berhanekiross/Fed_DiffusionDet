@@ -2,9 +2,9 @@ import os
 import cv2
 
 # Paths
-image_dir = "/mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/training/image_2"
-label_kitti_dir = "/mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/training/label_2"
-label_yolo_dir = "/mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/training/label_yolo"
+image_dir = "/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training/image_2"
+label_kitti_dir = "/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training/label_2"
+label_yolo_dir = "/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training/label_yolo"
 
 # Class list used in KITTI to YOLO
 kitti_classes = ['Car', 'Van', 'Truck', 'Pedestrian', 'Person_sitting', 'Cyclist', 'Tram']

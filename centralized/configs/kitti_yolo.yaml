@@ -1,6 +1,6 @@
 # kitti_yolo.yaml
 
-path: /mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/training  # root dir containing images/ and labels/
+path: /mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training  # root dir containing images/ and labels/
 
 train: images/train  # relative path from 'path'
 val: images/val      # relative path from 'path'

@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 # Paths
-LABELS_DIR = "/mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/training/labels"
+LABELS_DIR = "/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training/labels"
 IMAGES_DIR = "samples_per_class"
 OUTPUT_DIR = "labelled_images"
 

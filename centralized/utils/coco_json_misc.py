@@ -5,8 +5,8 @@ from datetime import datetime
 
 def create_kitti_coco_json_with_dontcare():
     # Paths
-    image_dir = "/cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/training/image_2/"
-    label_dir = "/cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/training/label_2/"
+    image_dir = "/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training/image_2/"
+    label_dir = "/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training/label_2/"
     output_path = "datasets/kitti_coco/annotations/train2017_with_misc.json"
     
     # KITTI categories (including Misc as DontCare equivalent)

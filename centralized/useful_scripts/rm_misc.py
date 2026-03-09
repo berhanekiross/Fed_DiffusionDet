@@ -1,7 +1,7 @@
 import os
 
 # Define the label folder
-label_dir = "/mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/training/label_yolo"
+label_dir = "/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training/label_yolo"
 
 # Go through all label files and remove lines that start with '7'
 removed_counts = {}

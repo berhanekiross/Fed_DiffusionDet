@@ -13,9 +13,9 @@ def register_kitti_splits():
     """
     
     # Define paths for splits
-    DATASET_ROOT = "/cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/centralized/datasets/kitti_coco"
-    # IMAGES_PATH = "/cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/training/image_2"
-    IMAGES_PATH = "/cephyr/users/kiross/Alvis/Desktop/mimer_naiss2024-5-153/Berhane/labelled_kitti/centralized/datasets/kitti_coco/images/train2017/"
+    DATASET_ROOT = "/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/centralized/datasets/kitti_coco"
+    # IMAGES_PATH = "/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training/image_2"
+    IMAGES_PATH = "/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/centralized/datasets/kitti_coco/images/train2017/"
     
     # Register training split
     register_coco_instances(

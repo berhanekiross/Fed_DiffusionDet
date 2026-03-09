@@ -13,7 +13,7 @@ def create_test_subset(subset_size=1000, seed=42):
     """Create test subset with balanced class distribution"""
     
     # Paths
-    zod_base = Path("/mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/zod_processed")
+    zod_base = Path("/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/zod_processed")
     annotations_dir = zod_base / "annotations/centralized"
     output_dir = zod_base / "annotations/test_subset"
     
@@ -129,7 +129,7 @@ def register_test_subset():
     from detectron2.data import MetadataCatalog
     
     # Paths
-    zod_base = Path("/mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/zod_processed")
+    zod_base = Path("/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/zod_processed")
     subset_dir = zod_base / "annotations/test_subset"
     images_dir = zod_base / "images"
     

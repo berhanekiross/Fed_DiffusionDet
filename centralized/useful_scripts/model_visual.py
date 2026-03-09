@@ -11,7 +11,7 @@ import os
 import sys
 
 # Add paths
-sys.path.append('/mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/centralized')
+sys.path.append('/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/centralized')
 from diffusiondet import add_diffusiondet_config
 from diffusiondet.util.model_ema import add_model_ema_configs
 

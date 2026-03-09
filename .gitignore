@@ -20,7 +20,7 @@ __pycache__/
 *.pyd
 .Python
 
-# Outputs and results - DON'T PUSH (except centralized/final_outputs and centralized/kitti_analysis)
+# Outputs and results - DON'T PUSH
 **/output/
 **/outputs/
 **/temp/
@@ -38,14 +38,14 @@ __pycache__/
 !centralized/final_outputs/
 !centralized/kitti_analysis/
 
-# Model weights (exclude large files)
+# Model weights
 *.pth
 *.pt
 
-# Dataset annotation files (too large)
+# Dataset annotations
 **/annotations/*.json
 
-# Exclude large result files (over GitHub 100MB limit)
+# Large result files (over 50MB)
 **/metrics1.json
 **/coco_instances_results.json
 
@@ -57,21 +57,17 @@ __pycache__/
 # IDE
 .vscode/
 .idea/
-*.swp
-*.swo
 
 # Temporary files
 *.log
 .DS_Store
 
-# Script files at root
+# Root scripts
 *.py
 *.txt
 *.sh
 !centralized/**/*.py
 !centralized/**/*.txt
 !centralized/**/*.sh
-
-# Keep important files
 !README.md
 !requirements.txt

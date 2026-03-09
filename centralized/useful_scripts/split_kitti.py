@@ -4,7 +4,7 @@ import random
 from pathlib import Path
 
 # Paths
-base_dir = Path("/mimer/NOBACKUP/groups/naiss2024-5-153/Berhane/labelled_kitti/training")
+base_dir = Path("/mimer/NOBACKUP/groups/naiss2024-5-153/old_projects/Berhane/labelled_kitti/training")
 image_dir = base_dir / "image_2"
 label_dir = base_dir / "label_yolo"
 
