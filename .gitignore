@@ -4,7 +4,7 @@ global_val/
 testing/
 training/
 
-# Virtual environments
+# Virtual environments - DON'T PUSH
 vyolo/
 venv/
 env/
@@ -16,27 +16,62 @@ fl_app/
 # Python cache
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.Python
 
-# Outputs
-**/final_outputs/
+# Outputs and results - DON'T PUSH (except centralized/final_outputs and centralized/kitti_analysis)
+**/output/
+**/outputs/
 **/temp/
-**/logs/
+**/temp_eval/
 **/inferences*/
+**/logs/
+**/runs/
+**/preds*/
+**/client_datasets/
+**/fl_dataset/images/
+**/fl_dataset/partitions/
+**/datasets/
 
-# Model weights
+# Allow centralized results
+!centralized/final_outputs/
+!centralized/kitti_analysis/
+
+# Model weights (exclude large files)
 *.pth
 *.pt
 
-# Images
+# Dataset annotation files (too large)
+**/annotations/*.json
+
+# Exclude large result files (over GitHub 100MB limit)
+**/metrics1.json
+**/coco_instances_results.json
+
+# Image files
 *.png
 *.jpg
-*.json
+*.jpeg
 
 # IDE
 .vscode/
+.idea/
+*.swp
+*.swo
 
-# Root files except centralized
-/*.py
-/*.txt
-/*.sh
+# Temporary files
+*.log
+.DS_Store
+
+# Script files at root
+*.py
+*.txt
+*.sh
+!centralized/**/*.py
+!centralized/**/*.txt
+!centralized/**/*.sh
+
+# Keep important files
 !README.md
+!requirements.txt

@@ -1,0 +1,117 @@
+{
+  "dataset": "KITTI",
+  "analysis_timestamp": "2025-08-03 13:56:31",
+  "train": {
+    "total_annotations": 31780,
+    "total_images": 5984,
+    "bbox_stats": {
+      "width": {
+        "mean": 101.60144619257396,
+        "median": 68.78500000000003,
+        "std": 88.63168604721004,
+        "min": 0.10999999999989996,
+        "max": 547.11,
+        "percentiles": {
+          "25": 39.75,
+          "50": 68.78500000000003,
+          "75": 131.88,
+          "90": 233.0880000000002,
+          "95": 301.4715,
+          "99": 405.4163
+        }
+      },
+      "height": {
+        "mean": 73.3068285084959,
+        "median": 52.46000000000001,
+        "std": 56.92574407438007,
+        "min": 12.670000000000016,
+        "max": 375.0,
+        "percentiles": {
+          "25": 33.13000000000002,
+          "50": 52.46000000000001,
+          "75": 94.35250000000002,
+          "90": 164.85,
+          "95": 187.66049999999998,
+          "99": 250.60669999999976
+        }
+      },
+      "diagonal": {
+        "mean": 129.35621864022653,
+        "median": 93.48703813791047,
+        "percentiles": {
+          "10": 40.68538373689828,
+          "30": 63.54041957402705,
+          "50": 93.48703813791047,
+          "70": 147.5600172423593,
+          "85": 229.9808775984823,
+          "95": 348.60513662001654
+        }
+      }
+    },
+    "labels_per_image": {
+      "mean": 5.310828877005347,
+      "median": 4.0,
+      "max": 21,
+      "percentiles": {
+        "90": 10.0,
+        "95": 13.0,
+        "99": 16.0
+      }
+    },
+    "class_counts": {
+      "Truck": 3591,
+      "Van": 873,
+      "Person_sitting": 1325,
+      "Cyclist": 406,
+      "Car": 2317,
+      "Pedestrian": 188
+    }
+  },
+  "val": {
+    "total_annotations": 7817,
+    "total_images": 1497,
+    "class_counts": {
+      "Truck": 896,
+      "Car": 597,
+      "Person_sitting": 302,
+      "Van": 221,
+      "Cyclist": 105,
+      "Pedestrian": 34
+    }
+  },
+  "analysis_summary": {
+    "classes": [
+      "Car",
+      "Van",
+      "Truck",
+      "Pedestrian",
+      "Person_sitting",
+      "Cyclist",
+      "Tram"
+    ],
+    "current_anchor_ratios": [
+      0.1,
+      0.5,
+      1.0,
+      2.0,
+      4.0
+    ],
+    "current_anchor_sizes": [
+      32,
+      64,
+      128,
+      256,
+      512,
+      1024
+    ],
+    "recommended_detections_per_image": 13,
+    "recommended_anchor_sizes": [
+      40,
+      63,
+      93,
+      148,
+      229,
+      349
+    ]
+  }
+}
