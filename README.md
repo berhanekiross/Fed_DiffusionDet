@@ -17,7 +17,6 @@ This project contains centralized baselines and two federated learning implement
 ## Quick Start
 
 ### Prerequisites
-```bash
 - Python 3.11
 - CUDA 12.1.1
 - PyTorch 2.1.2
