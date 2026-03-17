@@ -1,6 +1,6 @@
 # Fed_DiffusionDet
 
-Federated Learning implementation of diffusion-based object detection. It's built over [DiffusionDet](https://github.com/ShoufaChen/DiffusionDet) and with a benchmark [Ultranalytic's]() YOLO for object detection on KITTI datasets.
+Federated Learning implementation of diffusion-based object detection. It's built over [DiffusionDet](https://github.com/ShoufaChen/DiffusionDet) and with a benchmark [Ultranalytic's](https://github.com/ultralytics) YOLO for object detection on KITTI datasets.
 
 This project contains centralized baselines and two federated learning implementations using the **Flower (flwr) framework**. Each federated implementation is a separate Flower app created with `flwr new`. Please watch [these tutorials](https://youtube.com/playlist?list=PLNG4feLHqCWkdlSrEL2xbCtGa6QBxlUZb&si=C525duifNr7FjhZe) for more clarity on Flower app.
 
