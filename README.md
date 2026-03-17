@@ -4,10 +4,10 @@ Federated Learning implementation of diffusion-based object detection. It's buil
 
 This project contains centralized baselines and two federated learning implementations using the **Flower (flwr) framework**. Each federated implementation is a separate Flower app created with `flwr new`. Please watch [these tutorials](https://youtube.com/playlist?list=PLNG4feLHqCWkdlSrEL2xbCtGa6QBxlUZb&si=C525duifNr7FjhZe) for more clarity on Flower app.
 
-![Sample Detection](centralized/fl_diffusiondet/006390_sample_detection.png)
+![Sample Detection](fl_diffusiondet/006390_sample_detection.png)
 *Sample object detection result on KITTI dataset*
 
-## 📁 Repository Structure
+## Repository Structure
 
 - **`centralized/`** - Centralized DiffusionDet and YOLO baselines
 - **`fl_yolo/`** - Federated YOLO (Flower app)
@@ -17,10 +17,12 @@ This project contains centralized baselines and two federated learning implement
 ## Quick Start
 
 ### Prerequisites
+```bash
 - Python 3.11
 - CUDA 12.1.1
 - PyTorch 2.1.2
 - Flower (flwr) 1.19.0
+```
 
 ### Environment Setup
 ```bash
@@ -29,10 +31,11 @@ git clone https://github.com/berhanekiross/Fed_DiffusionDet.git
 cd Fed_DiffusionDet
 
 # Install Flower
+```bash
 pip install -U flwr
 ```
 
-## 🏗️ Federated Learning Apps
+## Federated Learning Apps
 
 ### 1. FL-YOLO
 
@@ -66,7 +69,7 @@ flwr run . local-simulation-gpu
 - Model config: `configs/diffdet_config.yaml`
 - Dataset: COCO-format annotations in `fl_dataset/annotations/`
 
-## 📊 Centralized Baselines
+## Centralized Baselines
 
 ### DiffusionDet on KITTI
 ```bash
