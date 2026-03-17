@@ -1,0 +1,71 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fl"
+version = "1.0.0"
+description = "Federated DiffusionDet using Flower"
+license = "Apache-2.0"
+dependencies = [
+    "flwr[simulation]>=1.18.0",
+    "numpy>=1.21.6,<2.0.0"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[tool.flwr.app]
+publisher = "bre"
+
+[tool.flwr.app.components]
+serverapp = "fl.server_app:app"
+clientapp = "fl.client_app:app"
+
+[tool.flwr.app.config]
+num-server-rounds = 100
+fraction-fit = 1
+local-epochs = 1
+
+# Evaluation settings
+perform_eval = true
+use_coco_eval = true
+use_class_weights = false
+perform_logging = false
+eval_frequency = 250
+save_detailed_metrics = false
+output_base = "./output_temp_iid"
+
+# partition_type - options: choose iid for iid, else -
+data_partition_type = "iid"
+
+# Global evaluation: Enable global val every n rounds
+enable_global_eval = true
+global_eval_frequency = 20   
+
+# Strategy configuration-Options: "fedavg", "fedprox", "fednova", "size_sqrt", "size_log", "size_cbrt"
+strategy = "fedavg"           
+save_every = 5
+
+# FedProx specific: Proximal term coefficient (only for fedprox)
+mu = 0.01                      
+
+# Size adjustment specific: Options: "sqrt", "log", "cbrt" (only for size_* strategies)  
+adjustment = "sqrt"            
+
+# Options: "cosine", "step", "exponential"
+lr_schedule = "cosine"           
+initial_lr = 0.00002            
+final_lr = 0.0000025              
+lr_decay_start = 170            
+
+[tool.flwr.federations]
+default = "local-simulation"
+
+[tool.flwr.federations.local-simulation]
+options.num-supernodes = 6
+
+[tool.flwr.federations.local-simulation-gpu]
+options.num-supernodes = 6
+options.backend.client-resources.num-cpus = 2 
+options.backend.client-resources.num-gpus = 0.135

@@ -10,7 +10,6 @@ venv/
 env/
 
 # Other code directories (push separately)
-fl_yolo/
 fl_app/
 
 # Python cache

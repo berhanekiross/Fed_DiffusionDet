@@ -1,0 +1,45 @@
+fl_app/
+├── configs/
+│   ├── fl_config.yaml          
+│   └── diffdet_config.yaml     
+├── fl_dataset/
+│   ├── annotations/               # COCO-style JSONs
+│   │   ├── train_Car.json
+│   │   ├── val_Car.json
+│   │   └── global_val.json
+│   ├── images/                    # Symlinks to original images
+│   │   ├── 000001.png -> ../labelled_kitti/training/image_2/000001.png
+│   │   └── ...
+│   └── partitions/                # YOLO-compatible path lists
+│       ├── train_car.txt       # Format: client_name/image_path
+│       └── val_car.txt
+│       └── .....
+├── fl/
+│   ├── __init__.py          
+│   └── client_app.py  
+│   ├── config_utils.py          
+│   └── server_app.py
+│   ├── strategies.py          
+│   └── task.py
+├── pyproject.toml                 
+├── output/
+│   ├── global/                 # Global model checkpoints
+│   │   ├── final_global_model.pth
+│   │   ├── latest_global_model.pth
+│   │   
+│   └── clients/                # Client-specific outputs
+│       ├── Car/
+│       ├── Van/
+│       └── Truck/
+└── register_kitti_fldata.py    #  dataset registering script
+
+
+cd ..
+source setenv.sh
+cd fl_app/
+clear
+
+sbatch app_train_kitti.sh
+scancel -u kiross
+squeue -u kiross
+

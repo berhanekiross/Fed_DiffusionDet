@@ -1,0 +1,97 @@
+# DiffusionDet configuration for KITTI dataset with ResNet-50 backbone
+# This configuration is optimized for training on the KITTI dataset with a ResNet-50 backbone
+# and includes modifications for improved performance and training stability. 
+
+
+# client training configs
+#================================
+VERSION: 2
+
+MODEL:
+  META_ARCHITECTURE: "DiffusionDet"
+  WEIGHTS: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+  
+  BACKBONE:
+    NAME: "build_resnet_fpn_backbone"
+  
+  RESNETS:
+    DEPTH: 50
+    STRIDE_IN_1X1: False
+    OUT_FEATURES: ["res2", "res3", "res4", "res5"]
+    NORM: "FrozenBN"
+    
+  FPN:
+    IN_FEATURES: ["res2", "res3", "res4", "res5"]
+    OUT_CHANNELS: 256
+    NORM: ""
+    FUSE_TYPE: "sum"
+  
+  ROI_HEADS:
+    NAME: "DiffusionDetROIHead"
+    IN_FEATURES: ["p2", "p3", "p4", "p5"]
+    NUM_CLASSES: 7
+    
+  DiffusionDet:
+    NUM_PROPOSALS: 800              # Increased from 300 for better performance
+    NUM_CLASSES: 7
+    SAMPLE_STEP: 1                  # Training with 1 step, inference with 4 steps
+
+DATASETS:
+  TRAIN: ["kitti_train_split"]  # Updated to use fixed datasets
+  TEST: ["kitti_val_split"]     # Updated to use fixed datasets
+
+DATALOADER:
+  NUM_WORKERS: 2
+  SAMPLER_TRAIN: "TrainingSampler"
+
+SOLVER:
+  IMS_PER_BATCH: 6                  # Increased from 4 for faster training
+  BASE_LR: .000025                   # Standard learning rate for batch size 6
+  STEPS: [60000, 80000]             # Learning rate decay at 50k and 70k iterations
+  MAX_ITER: 90000                   # Full training - approximately 150 epochs on KITTI
+  GAMMA: 0.1                        # LR decay factor
+  WEIGHT_DECAY: 0.0001
+  WEIGHT_DECAY_NORM: 0.0
+  WARMUP_FACTOR: 0.1
+  WARMUP_ITERS: 10                # 1000 iteration warmup
+  OPTIMIZER: "ADAMW"
+  WARMUP_METHOD: "linear"
+  CHECKPOINT_PERIOD: 2000           # Save every 2000 iterations (more frequent)
+  CLIP_GRADIENTS:
+    ENABLED: True
+    CLIP_TYPE: "value"
+    CLIP_VALUE: 0.1
+
+INPUT:
+  MIN_SIZE_TRAIN: [640, 672, 704, 736, 768]  # Multi-scale training for robustness
+  MAX_SIZE_TRAIN: 1200              # Increased for better detection quality
+  MIN_SIZE_TEST: 800                # Standard test size
+  MAX_SIZE_TEST: 1200               # Match training max size
+  FORMAT: "BGR"
+  
+  # Data Augmentation for better generalization
+  CROP:
+    ENABLED: True
+    TYPE: "relative_range"
+    SIZE: [0.9, 0.9]
+
+TEST:
+  EVAL_PERIOD: 2000                 # Evaluate every 2000 iterations
+  EXPECTED_RESULTS: []
+  DETECTIONS_PER_IMAGE: 100         # Max detections per image
+
+# Output and Logging
+OUTPUT_DIR: "./output/kitti_res50_90kIter"
+SEED: 42
+
+# Performance optimizations
+CUDNN_BENCHMARK: True               # Enable for faster training with fixed input sizes
+
+# Model EMA for better performance
+MODEL_EMA:
+  ENABLED: True                     # Enable Exponential Moving Average
+  DECAY: 0.9999
+
+
+# server training configs
+#================================
