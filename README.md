@@ -87,10 +87,7 @@ yolo detect train \
     batch=64 \
     imgsz=640 \
     workers=16 \
-    cache=True \
     device=0 \
-    project=yolo_kitti_temp \
-    name=train
 ```
 
 ## Dataset Setup
